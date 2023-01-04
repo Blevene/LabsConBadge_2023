@@ -7,11 +7,12 @@ import digitalio
 import time
 
 # create pulsein and pulseout objects to read and write IR pulses
-pulsein = pulseio.PulseIn(board.IR_RX, maxlen=120, idle_state=True)
-pulseout = pulseio.PulseOut(board.IR_TX)
+pulsein = pulseio.PulseIn(board.D12, maxlen=120, idle_state=True)
+pulseout = pulseio.PulseOut(board.D13)
 
 # set up button
-button = digitalio.DigitalInOut(board.BUTTON)
+# one pin to D3, other to Ground
+button = digitalio.DigitalInOut(board.D3)
 button.direction = digitalio.Direction.INPUT
 button.pull = digitalio.Pull.UP
 
@@ -29,7 +30,7 @@ while True:
         led.value = True
         pulseout.send(b'Hello')
         led.value = False
-        time.sleep(0.002)  # blink LED every 2ms
+        time.sleep(0.2)  # blink LED every 200ms
 
         # read incoming message
         pulses = pulsein.read(10)  # read up to 10 pulses

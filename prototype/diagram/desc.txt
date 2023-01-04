@@ -1,0 +1,13 @@
+Adafruit Feather nRF52840 Express:
+OLED Screen:
+    SDA (I2C data) pin
+    SCL (I2C clock) pin
+IR Transmitter:
+    Any digital output pin
+IR Receiver:
+    Any digital input pin
+5-Way Button:
+    Any 5 digital input pin
+On-Off Switch:
+    En pin
+    Gnd pin
