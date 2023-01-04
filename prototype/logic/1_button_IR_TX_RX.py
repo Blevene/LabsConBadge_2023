@@ -1,6 +1,6 @@
 '''
 Thanks ChatGPT.
-This code allows use to transmit and recieve a message using IR
+This code allows us to transmit and recieve a message using IR
 At the press of a button.
 '''
 import board
