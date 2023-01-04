@@ -1,3 +1,7 @@
+'''
+Template code for handling a 5-way button
+Pins per Fritzing Diagram.
+'''
 import board
 import digitalio
 import time

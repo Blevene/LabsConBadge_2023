@@ -1,5 +1,7 @@
 '''
-Thanks ChatGPT, we need to change the Pins as none of the stuff is built into the board
+Thanks ChatGPT.
+This code allows use to transmit and recieve a message using IR
+At the press of a button.
 '''
 import board
 import pulseio
