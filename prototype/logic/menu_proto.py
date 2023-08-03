@@ -30,14 +30,21 @@ select_button.direction = digitalio.Direction.INPUT
 select_button.pull = digitalio.Pull.UP
 
 
-# Define our Menu
-menu = ["Send", "Receive", "Show All Clues", "Send Answer"]
+# main menu and clues menu
+# Note: clues menu will have to read from the recieved clues file in flash storage
+main_menu = ["Send", "Receive", "Show All Clues", "Send Answer"]
+clues_menu = ["1", "2", "3", "4", "5"]
+
+# By default, we start in the main menu
+menu = main_menu
+is_in_main_menu = True
+
+# The position we are highlighting in our current menu
 current_position = 0
 
 # Build and Display our Menu on the OLED
 def draw():
     display.fill(0)
-    display.text('Menu:', 0, 0, 1)
     for i, option in enumerate(menu):
         y = 10 + i*10
         if i == current_position:
@@ -59,8 +66,20 @@ while True:
         draw()
 
     elif not select_button.value:  # select
-        print("Selected: ", menu[current_position])
-        # Do The Needful Based on the value of menu[current_position]
+        if is_in_main_menu and menu[current_position] == "Show All Clues":
+            menu = clues_menu
+            current_position = 0
+            is_in_main_menu = False
+        else:
+            print("Selected: ", menu[current_position])
+            # Do The Needful Based on the value of menu[current_position]
 
-    elif not left_button.value or not right_button.value:  # do nothing, here for future use
+    elif not left_button.value:
+        if not is_in_main_menu:
+            menu = main_menu
+            current_position = 0
+            is_in_main_menu = True
+        draw()
+    
+    elif not right_button.value:  # do nothing, here for future use
         pass
