@@ -70,9 +70,17 @@ while True:
             menu = clues_menu
             current_position = 0
             is_in_main_menu = False
+        # Do The Needful Based on the value of menu[current_position]
+        #elif is_in_main_menu and menu[current_position] == "Send":
+            #do the send thing
+        #elif is_in_main_menu and menu[current_position] == "Recieve":
+             #do the recieve thing
+        #elif is_in_main_menu and menu[current_position] == "Send Answer":
+            #send the guess
         else:
             print("Selected: ", menu[current_position])
-            # Do The Needful Based on the value of menu[current_position]
+            pass
+
 
     elif not left_button.value:
         if not is_in_main_menu:
