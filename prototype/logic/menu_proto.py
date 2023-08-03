@@ -32,8 +32,11 @@ select_button.pull = digitalio.Pull.UP
 
 # main menu and clues menu
 # Note: clues menu will have to read from the recieved clues file in flash storage
-main_menu = ["Send", "Receive", "Show All Clues", "Send Answer"]
+main_menu = ["Send", "Receive", "Show All Clues", "Send Answer", "Clear Answers"]
 clues_menu = ["1", "2", "3", "4", "5"]
+
+#when the user is creating their answer key this list will store it
+selected_clues = []
 
 # By default, we start in the main menu
 menu = main_menu
@@ -66,20 +69,24 @@ while True:
         draw()
 
     elif not select_button.value:  # select
-        if is_in_main_menu and menu[current_position] == "Show All Clues":
-            menu = clues_menu
-            current_position = 0
-            is_in_main_menu = False
-        # Do The Needful Based on the value of menu[current_position]
-        #elif is_in_main_menu and menu[current_position] == "Send":
-            #do the send thing
-        #elif is_in_main_menu and menu[current_position] == "Recieve":
-             #do the recieve thing
-        #elif is_in_main_menu and menu[current_position] == "Send Answer":
-            #send the guess
+        if is_in_main_menu:
+            if menu[current_position] == "Show All Clues":
+                menu = clues_menu
+                current_position = 0
+                is_in_main_menu = False
+            elif menu[current_position] == "Send Answer":
+                # Print our selected clues to console
+                print("Selected clues: ", selected_clues)
+            elif menu[current_position] == "Clear Answers":
+                selected_clues.clear()
+                print("Answers cleared")
+            else:
+                print("Selected: ", menu[current_position])
         else:
-            print("Selected: ", menu[current_position])
-            pass
+            selected_clue = menu[current_position]
+            if selected_clue not in selected_clues:
+                selected_clues.append(selected_clue)
+            print("Selected clue: ", selected_clue)
 
 
     elif not left_button.value:
