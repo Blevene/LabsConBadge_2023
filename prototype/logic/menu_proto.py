@@ -2,6 +2,12 @@ import board
 import digitalio
 import busio
 import adafruit_ssd1306
+import time
+
+
+#------------------------------------------------------
+# Global Variables and Init Stuff
+#------------------------------------------------------
 
 # iInitialize the display
 i2c = busio.I2C(board.SCL, board.SDA)
@@ -29,6 +35,8 @@ select_button = digitalio.DigitalInOut(board.D7)
 select_button.direction = digitalio.Direction.INPUT
 select_button.pull = digitalio.Pull.UP
 
+# We need to introduce a DEBOUNCE delay, otherwise the buttons will read inputs REALLY quickly.
+DEBOUNCE_TIME = 0.2  # 200 milliseconds, adjust as needed
 
 # main menu and clues menu
 # Note: clues menu will have to read from the recieved clues file in flash storage
@@ -44,6 +52,16 @@ is_in_main_menu = True
 
 # The position we are highlighting in our current menu
 current_position = 0
+
+#------------------------------------------------------
+# Functions that we frequently call
+#------------------------------------------------------
+# Debounce function
+def debounce(button):
+    """Wait for the button to be released and then wait for DEBOUNCE_TIME"""
+    while button.value:  # Wait for the button to be released
+        time.sleep(0.01)  # Sleep for 10 milliseconds
+    time.sleep(DEBOUNCE_TIME)  # Wait for the debounce period to expire
 
 # Build and Display our Menu on the OLED
 def draw():
@@ -62,11 +80,13 @@ while True:
     if not up_button.value:  # move up
         current_position = (current_position - 1) % len(menu)
         draw()
+        debounce(up_button)
         
 
     elif not down_button.value:  # move down
         current_position = (current_position + 1) % len(menu)
         draw()
+        debounce(down_button)
 
     elif not select_button.value:  # select
         if is_in_main_menu:
@@ -95,6 +115,8 @@ while True:
             current_position = 0
             is_in_main_menu = True
         draw()
+        debounce(left_button)
     
     elif not right_button.value:  # do nothing, here for future use
         pass
+        debounce(right_button)
