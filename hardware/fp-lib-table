@@ -3,4 +3,5 @@
   (lib (name "usbc")(type "KiCad")(uri "${KIPRJMOD}/usbc.pretty")(options "")(descr ""))
   (lib (name "irda")(type "KiCad")(uri "${KIPRJMOD}/irda.pretty")(options "")(descr ""))
   (lib (name "dpad")(type "KiCad")(uri "${KIPRJMOD}/dpad.pretty")(options "")(descr ""))
+  (lib (name "labscon")(type "KiCad")(uri "${KIPRJMOD}/labscon.pretty")(options "")(descr ""))
 )
