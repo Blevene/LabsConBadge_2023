@@ -5,9 +5,8 @@ Key things:
 1) An empty file called my_clue and a file containing all individual clues beyond the 4 winning ones called clues_collection 
     must be created in the root of the storage drive (same place as boot.py and main.py)
 2) We need to have a reciever badge or device of some sort to recieve, decode, and validate our answers
-3) We will need to seed each badge with a third file, clue_set, this will be used to compare incoming rx against our generated clues
-   the goal is to eliminate all but 4 clues, aka our answer!
-
+2a) We can also have players show us their 4 remaining clues and validate manually, because tech is hard.
+3) The goal is to eliminate all but 4 clues, aka our answer!   
 '''
 
 import board
