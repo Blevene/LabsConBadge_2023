@@ -3631,7 +3631,7 @@
     (property "Value" "dpad" (at 42.545 174.625 0)
       (effects (font (size 1.27 1.27)))
     )
-    (property "Footprint" "dpad:10*10*10*9-6P WX" (at 42.545 174.625 0)
+    (property "Footprint" "dpad:10x10x10x9-6P-WX" (at 42.545 174.625 0)
       (effects (font (size 1.27 1.27)) hide)
     )
     (property "Datasheet" "" (at 42.545 174.625 0)
