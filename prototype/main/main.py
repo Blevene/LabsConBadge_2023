@@ -60,7 +60,7 @@ ir_rx = pulseio.PulseIn(board.D7, maxlen=120, idle_state=True)
 DEBOUNCE_TIME = 0.2  # 200 milliseconds, adjust as needed
 
 # main menu 
-main_menu = ["Send", "Receive", "Show My Answer", "Show All Clues", "Send Answer", "Clear Answers"]
+main_menu = ["Send", "Receive", "Show Remaining Clues", "Send Answer"]
 
 #when the user is creating their answer key this list will store it
 selected_clues = []
@@ -104,12 +104,14 @@ def read_clues_collection(filename):
     return lines
 
 # We'll call this function when we recieve a new clue from ir_recieve
-def append_to_clues_collection(filename, text):
-    try:
-        with open(filename, 'a') as file:  # 'a' stands for append mode
-            file.write(text + "\n")  # add a newline after the text
-    except OSError:
-        print("Error writing to file:", filename)
+def check_clue_store(clue):
+    clues_collection = read_clues_collection("/clues_collection")
+    check_string = clue
+    if check_string in clues_collection:
+        print("Clue is not part of winning combo!") #This is just a debug thing
+        # Remove the string from the underlying file so the clue is no longer there
+    else:
+        pass
 
 # Placeholder to encode our clue and translate it to a form that can be used for IRDA
 # Call this with my_clue to prep our local clue for tx
@@ -132,32 +134,27 @@ def ir_transmit(clue):
 #Placeholder for recieve
 def ir_recieve():
     #Do the Recieve
-    rx_clue = #Raw Buffer from IRDA
+    rx_clue = "" #Raw Buffer from IRDA
     decoded_rx_clue = decode(rx_clue)
-    append_to_clues_collection("/collected_clues", decoded_rx_clue)
+    check_clue_store(decoded_rx_clue)
 
     return 
 
 # Send our answer as an encoded list, we need to have a reciever badge or device of some sort to recieve, decode, and validate
 def send_answer(list_of_clues):
-    sorted_answer = list_of_clues.sort()
-    encoded_answer = encode(sorted_answer)
-    ir_transmit(encoded_answer)
-    
-
-def check_clue_store(clue):
-    clues_collection = read_clues_collection("/clues_collection")
-    check_string = clue
-    if check_string in clues_collection:
-        print("Clue is not part of winning combo!") #This is just a debug thing
-        # Remove the string from the underlying file so the clue is no longer there
+    num_clues = len(list_of_clues)
+    if num_clues > 4:
+        print(f"You still have {num_clues} left, your goal is 4!")
     else:
-        pass
+        sorted_answer = list_of_clues.sort()
+        encoded_answer = encode(sorted_answer)
+        ir_transmit(encoded_answer)
+    
 
 # Clues Menu
 # on the local filesystem of the badge, there will be a "collected_clues" file which we expect to contain one clue per line
 # clues_menu = ["1", "2", "3", "4", "5"]
-clues_menu = read_clues_collection("/collected_clues")
+clues_menu = read_clues_collection("/clues_collection")
 
 # Lets setup our local clue that we'll send
 my_clue = read_clues_collection("/my_clue")
@@ -181,7 +178,7 @@ while True:
 
     elif not select_button.value:  # select
         if is_in_main_menu:
-            if menu[current_position] == "Show All Clues":
+            if menu[current_position] == "Show Remaining Clues":
                 menu = clues_menu
                 current_position = 0
                 is_in_main_menu = False
@@ -194,20 +191,10 @@ while True:
             elif menu[current_position] == "Send Answer":
                 print("SENDING ANSWER") #Comment Out
                 #send_answer(selected_clues)
-            elif menu[current_position] == "Show My Answer":
-                print("Selected clues: ", selected_clues)
-            elif menu[current_position] == "Clear Answers":
-                selected_clues.clear()
-                print("Answers cleared")
+            # Don't think this is needed?
             else:
-                print("Selected: ", menu[current_position])
-        else:
-            selected_clue = menu[current_position]
-            if selected_clue not in selected_clues:
-                selected_clues.append(selected_clue)
-            print("Selected clue: ", selected_clue)
-
-
+                pass
+        
     elif not left_button.value:
         if not is_in_main_menu:
             menu = main_menu
