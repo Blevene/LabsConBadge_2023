@@ -176,11 +176,14 @@ while True:
                 current_position = 0
                 is_in_main_menu = False
             elif menu[current_position] == "Send":
-                ir_transmit(my_clue)
+                print("SENDING") #comment out
+                #ir_transmit(my_clue)
             elif menu[current_position] == "Recieve":
-                ir_recieve()
+                print("RECIEVING") #comment out 
+                #ir_recieve()
             elif menu[current_position] == "Send Answer":
-                send_answer(selected_clues)
+                print("SENDING ANSWER") #Comment Out
+                #send_answer(selected_clues)
             elif menu[current_position] == "Show My Answer":
                 print("Selected clues: ", selected_clues)
             elif menu[current_position] == "Clear Answers":
