@@ -2,10 +2,11 @@
 Labscon 2023 Badge Code
 
 Key things:
-1) Empty files called my_clue and clues_collection must be created in the root of the storage drive
-   (same place as boot.py and main.py)
+1) An empty file called my_clue and a file containing all individual clues beyond the 4 winning ones called clues_collection 
+    must be created in the root of the storage drive (same place as boot.py and main.py)
 2) We need to have a reciever badge or device of some sort to recieve, decode, and validate our answers
-
+3) We will need to seed each badge with a third file, clue_set, this will be used to compare incoming rx against our generated clues
+   the goal is to eliminate all but 4 clues, aka our answer!
 
 '''
 
@@ -143,6 +144,15 @@ def send_answer(list_of_clues):
     encoded_answer = encode(sorted_answer)
     ir_transmit(encoded_answer)
     
+
+def check_clue_store(clue):
+    clues_collection = read_clues_collection("/clues_collection")
+    check_string = clue
+    if check_string in clues_collection:
+        print("Clue is not part of winning combo!") #This is just a debug thing
+        # Remove the string from the underlying file so the clue is no longer there
+    else:
+        pass
 
 # Clues Menu
 # on the local filesystem of the badge, there will be a "collected_clues" file which we expect to contain one clue per line
