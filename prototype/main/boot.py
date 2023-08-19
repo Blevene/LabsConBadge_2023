@@ -8,7 +8,7 @@ import digitalio
 import storage
 
 # EDIT ME the toggle switch pin goes here!
-switch = digitalio.DigitalInOut(board.D2)
+switch = digitalio.DigitalInOut(board.D3)
 
 
 switch.direction = digitalio.Direction.INPUT
