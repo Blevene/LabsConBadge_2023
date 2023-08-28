@@ -2,4 +2,5 @@
   (version 7)
   (lib (name "dpad")(type "KiCad")(uri "${KIPRJMOD}/dpad.kicad_sym")(options "")(descr ""))
   (lib (name "irda-phy")(type "KiCad")(uri "${KIPRJMOD}/irda-phy.kicad_sym")(options "")(descr ""))
+  (lib (name "ws2018b")(type "KiCad")(uri "${KIPRJMOD}/ws2812b.kicad_sym")(options "")(descr ""))
 )
