@@ -1,4 +1,4 @@
-(footprint "LED_WS2812B_PLCC4_5.0x5.0mm_P3.2mm" (version 20221018) (generator pcbnew)
+(footprint "LED_WS2812B_PLCC4_1.0x1.0mm" (version 20221018) (generator pcbnew)
   (layer "F.Cu")
   (descr "https://cdn-shop.adafruit.com/datasheets/WS2812B.pdf")
   (tags "LED RGB NeoPixel")
