@@ -8619,7 +8619,7 @@
       (stroke (width 0) (type solid)) (fill solid) (layer "B.SilkS") (tstamp ca61737c-2020-4bff-9222-50de5a4d14e5))
   )
 
-  (gr_rect (start 175 80) (end 125 110)
+  (gr_rect (start 125 80) (end 175 110)
     (stroke (width 0.2) (type solid)) (fill solid) (layer "B.SilkS") (tstamp a8212780-1f96-4539-869f-32f56bd86c45))
   (gr_line (start 144 120) (end 156 120)
     (stroke (width 0.1) (type default)) (layer "Edge.Cuts") (tstamp 06a1ad2a-dc03-41bd-9896-85c8b9b90054))
