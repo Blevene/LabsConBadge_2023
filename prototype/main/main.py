@@ -100,7 +100,19 @@ def read_clues_collection(filename):
             lines = [line.strip() for line in file]
     except OSError:
         print("Error reading from file:", filename)
+        return []
     return lines
+
+def write_clues_collection(filename, collection):
+    lines = []
+    try:
+        fhandle = open(filename, 'w'):
+        fhandle.write("\n".join(collection))
+        fhandle.close()
+    except OSError:
+        print("Error writing file:", filename)
+        return False
+    return True
 
 # We'll call this function when we recieve a new clue from ir_recieve
 def check_clue_store(clue):
@@ -109,7 +121,10 @@ def check_clue_store(clue):
     if check_string in clues_collection:
         print("Clue is not part of winning combo!") #This is just a debug thing
         # Remove the string from the underlying file so the clue is no longer there
+        clues_collection.remove(check_string)
+        write_clues_collection("/clues_collection", clues_collection)
     else:
+        print(f"Clue: {clue} not found")
         pass
 
 # Placeholder to encode our clue and translate it to a form that can be used for IRDA
