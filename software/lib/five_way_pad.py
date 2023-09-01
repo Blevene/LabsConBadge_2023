@@ -38,6 +38,16 @@ class FiveWayPad:
         self.r.update()
         self.x.update()
 
+    #how long ago was the last button push?
+    def duration(self):
+        return min([
+            self.u.current_duration,
+            self.d.current_duration,
+            self.l.current_duration,
+            self.r.current_duration,
+            self.x.current_duration
+        ])
+
     #return true if any button is pressed (pulled down)
     def pressed(self):
         return not (self.u.value and self.d.value and self.l.value and self.r.value and self.x.value)
