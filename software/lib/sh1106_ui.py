@@ -25,6 +25,7 @@ class sh1106ui:
 
         # Make the display context
         self.splash = displayio.Group()
+        self.splash.hidden=True
         self.display.show(self.splash)
 
         color_bitmap = displayio.Bitmap(self.WIDTH, self.HEIGHT, 1)
@@ -35,19 +36,20 @@ class sh1106ui:
         self.splash.append(bg_sprite)
         
         # Draw a smaller inner rectangle
-        inner_bitmap = displayio.Bitmap(self.WIDTH - self.BORDER * 2, self.HEIGHT - self.BORDER * 2, 1)
+        inner_bitmap = displayio.Bitmap(self.WIDTH, self.HEIGHT - self.BORDER, 1)
         inner_palette = displayio.Palette(1)
         inner_palette[0] = 0x000000  # Black
         inner_sprite = displayio.TileGrid(
-            inner_bitmap, pixel_shader=inner_palette, x=self.BORDER, y=self.BORDER
+            inner_bitmap, pixel_shader=inner_palette, x=0, y=self.BORDER
         )
         self.splash.append(inner_sprite)
 
         # Draw a label
-        self.text_area = label.Label(
-            terminalio.FONT, text="hello labscon", color=0xFFFFFF, x=28, y=self.HEIGHT // 2 - 1
-        )
-        self.splash.append(self.text_area)
+        self.header = label.Label(terminalio.FONT, text="home", color=0x000000, x=10, y=5)
+        self.splash.append(self.header)
+        self.details = label.Label(terminalio.FONT, text="details", color=0xFFFFFF, x=self.BORDER*2, y=self.HEIGHT // 2 + 1)
+        self.details.hidden=True
+        self.splash.append(self.details)
 
 
     def drawtext(self,text="Hello LABSCON"):
