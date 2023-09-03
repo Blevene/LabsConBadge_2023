@@ -2,10 +2,9 @@ import displayio
 import board
 import busio
 import adafruit_displayio_sh1106
-import terminalio
-from adafruit_display_text import label
-import time
 
+BLACK=0x000000
+WHITE=0xFFFFFF
 
 class sh1106ui:
     WIDTH = 130
@@ -14,6 +13,8 @@ class sh1106ui:
 
     #initialize display; if already initialized, pass the device. If not, then initialize the default
     def __init__(self,display=None):
+
+        #initialize display
         if display is None:
             displayio.release_displays()
             #i2c = busio.I2C(board.SCL1, board.SDA1)
@@ -23,34 +24,41 @@ class sh1106ui:
         else:
             self.display=display
 
-        # Make the display context
-        self.splash = displayio.Group()
-        self.splash.hidden=True
-        self.display.show(self.splash)
 
-        color_bitmap = displayio.Bitmap(self.WIDTH, self.HEIGHT, 1)
+        #todo: use a single palette
+
+        # Make maingroup to hold stuff
+        self.maingroup = displayio.Group()
+        self.maingroup.hidden=True
+        self.display.show(self.maingroup)
+
+        # make a background in the back of header
+        color_bitmap = displayio.Bitmap(self.WIDTH, 16, 1)
         color_palette = displayio.Palette(1)
-        color_palette[0] = 0xFFFFFF  # White
+        color_palette[0] = WHITE
 
         bg_sprite = displayio.TileGrid(color_bitmap, pixel_shader=color_palette, x=0, y=0)
-        self.splash.append(bg_sprite)
+        self.maingroup.append(bg_sprite)
         
-        # Draw a smaller inner rectangle
-        inner_bitmap = displayio.Bitmap(self.WIDTH, self.HEIGHT - self.BORDER, 1)
-        inner_palette = displayio.Palette(1)
-        inner_palette[0] = 0x000000  # Black
-        inner_sprite = displayio.TileGrid(
-            inner_bitmap, pixel_shader=inner_palette, x=0, y=self.BORDER
-        )
-        self.splash.append(inner_sprite)
+        #make pagegroups that contains a separate group for each page
+        self.pagegroup = displayio.Group()
+        self.pagegroup.x = -260
+        self.maingroup.append(self.pagegroup)
+        self.settingsgroup = displayio.Group()
+        self.settingsgroup.x=0
+        self.pagegroup.append(self.settingsgroup)
+        self.contactsgroup = displayio.Group()
+        self.contactsgroup.x=130
+        self.pagegroup.append(self.contactsgroup)
+        self.homegroup = displayio.Group()
+        self.homegroup.x=260
+        self.pagegroup.append(self.homegroup)
+        self.cardsgroup = displayio.Group()
+        self.cardsgroup.x=390
+        self.pagegroup.append(self.cardsgroup)
 
-        # Draw a label
-        self.header = label.Label(terminalio.FONT, text="home", color=0x000000, x=10, y=5)
-        self.splash.append(self.header)
-        self.details = label.Label(terminalio.FONT, text="details", color=0xFFFFFF, x=self.BORDER*2, y=self.HEIGHT // 2 + 1)
-        self.details.hidden=True
-        self.splash.append(self.details)
-
-
-    def drawtext(self,text="Hello LABSCON"):
-        self.text_area.text=text
+        # make trade group overlay
+        self.tradegroup = displayio.Group()
+        self.tradegroup.y=-64
+        self.tradegroup.x=16
+        self.maingroup.append(self.tradegroup)
