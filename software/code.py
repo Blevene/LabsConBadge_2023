@@ -4,63 +4,136 @@ import busio
 import time
 import pulseio
 from five_way_pad import FiveWayPad
+from fake_irda import FakeIRDA
+import displayio
+import adafruit_imageload
+import adafruit_displayio_sh1106
 from sh1106_ui import sh1106ui
+import terminalio
+from adafruit_display_text import label
 from adafruit_ticks import ticks_ms, ticks_add, ticks_less
 
-
+BLACK=0x000000
+WHITE=0xFFFFFF
 
 display=sh1106ui()
 dpad=FiveWayPad()
 
 class home:
-    def __init__(self, display, dpad):
+    def __init__(self, group, dpad):
         self.dpad=dpad
-        self.display=display
+        self.group=group
+        self.header=label.Label(terminalio.FONT,text="home", color=BLACK, x=32, y=8)
+        self.group.append(self.header)
+        self.details=displayio.Group()
+        self.details.hidden=True
+        self.group.append(self.details)
 
     def update(self):
-        self.display.header.text="home"
         if dpad.u.fell: return "trade"
         if dpad.d.fell: return "sleep"
         if dpad.l.fell: return "contacts"
         if dpad.r.fell: return "cards"
-        if dpad.x.fell: display.details.hidden=not display.details.hidden
+        if dpad.x.fell: self.details.hidden=not self.details.hidden
         return "home"
 
 class cards:
-    def __init__(self, display, dpad):
+    def __init__(self, group, dpad):
         self.dpad=dpad
-        self.display=display
+        self.group=group
+        self.header=label.Label(terminalio.FONT,text="cards", color=BLACK, x=32, y=8)
+        self.group.append(self.header)
+        card_sheet, palette = adafruit_imageload.load("assets/cards.bmp",bitmap=displayio.Bitmap, palette=displayio.Palette)
+        self.card_grid = displayio.TileGrid(card_sheet, pixel_shader=palette,
+            width=11, height=3,
+            tile_width=12, tile_height=16)
+        card_group=displayio.Group()
+        card_group.y=16
+        card_group.append(self.card_grid)
+        self.group.append(card_group)
+
+        self.details=displayio.Group()
+        self.details.hidden=True
+        self.details.x=16
+        self.details.y=8
+        self.group.append(self.details)
+        bitmap=displayio.Bitmap(96,48,1)
+        palette=displayio.Palette(1)
+        palette[0]=0x00000
+        sprite=displayio.TileGrid(bitmap,pixel_shader=palette)
+        self.details.append(sprite)
+        self.det=label.Label(terminalio.FONT,text="details", color=WHITE, x=4, y=8)
+        self.details.append(self.det)
+        for i in range(3):
+            self.card_grid[i,0]=1
+        for i in range(5):
+            self.card_grid[i,1]=3
+        for i in range(4):
+            self.card_grid[i,2]=5
+        self.x=2
+        self.y=2
 
     def update(self):
-        self.display.header.text="cards"
-        if dpad.u.fell: return "trade"
-        if dpad.d.fell: return "sleep"
-        if dpad.l.fell: return "home"
-        if dpad.r.fell: return "settings"
-        if dpad.x.fell: display.details.hidden=not display.details.hidden
+        self.card_grid[self.x,self.y]=self.y*2+1
+        if self.dpad.u.fell:
+            if self.y==0: return "trade"
+            self.y -=1
+        if self.dpad.d.fell:
+            if self.y==2: return "sleep"
+            self.y +=1
+        if self.dpad.l.fell:
+            if self.x==0: return "home"
+            self.x -=1
+        if self.dpad.r.fell:
+            #todo change this to max # cards in the row
+            if self.x==2: return "settings"
+            self.x+=1
+        if dpad.x.fell: self.details.hidden=not self.details.hidden
+        self.card_grid[self.x,self.y]=self.y*2+2
+        self.det.text="details of card\n at [" + str(self.x) + "," + str(self.y) + "]"
         return "cards"
 
 class contacts:
-    def __init__(self, display, dpad):
+    def __init__(self, group, dpad):
         self.dpad=dpad
-        self.display=display
+        self.group=group
+        self.header=label.Label(terminalio.FONT,text="contacts", color=BLACK, x=32, y=8)
+        self.group.append(self.header)
+        self.details=displayio.Group()
+        self.details.hidden=True
+        self.group.append(self.details)
+
+        self.contactlist=["@securelyfitz","@blevene","@oscontext","@4","@5","@6"]
+        self.x=0
+        self.y=0
 
     def update(self):
-        self.display.header.text="contacts"
-        if dpad.u.fell: return "trade"
-        if dpad.d.fell: return "sleep"
-        if dpad.l.fell: return "settings"
-        if dpad.r.fell: return "home"
-        if dpad.x.fell: display.details.hidden=not display.details.hidden
+        if self.dpad.u.fell:
+            if self.x==0: return "trade"
+            self.x -=1
+        if self.dpad.d.fell:
+            if self.x==0: return "sleep"
+            self.x +=1
+        if self.dpad.l.fell:
+            if self.y==0: return "settings"
+            self.y -=1
+        if self.dpad.r.fell:
+            if self.y==0: return "home"
+            self.y+=1
+        if self.dpad.x.fell: self.display.details.hidden=not self.display.details.hidden
         return "contacts"
 
 class settings:
-    def __init__(self, display, dpad):
+    def __init__(self, group, dpad):
         self.dpad=dpad
-        self.display=display
+        self.group=group
+        self.header=label.Label(terminalio.FONT,text="settings", color=BLACK, x=32, y=8)
+        self.group.append(self.header)
+        self.details=displayio.Group()
+        self.details.hidden=True
+        self.group.append(self.details)
 
     def update(self):
-        self.display.header.text="settings"
         if dpad.u.fell: return "trade"
         if dpad.d.fell: return "sleep"
         if dpad.l.fell: return "cards"
@@ -69,57 +142,91 @@ class settings:
         return "settings"
 
 class trade:
-    state="tx"
+    state="transmitting"
     count=0
     timeout=5
     retries=3
+    mycard=[13]
 
-    def __init__(self, display, dpad):
+    def __init__(self, group, dpad):
         self.dpad=dpad
-        self.display=display
+        self.group=group
+        self.ir=FakeIRDA()
+        bitmap=displayio.Bitmap(96,48,1)
+        palette=displayio.Palette(1)
+        palette[0]=0x00000
+        sprite=displayio.TileGrid(bitmap,pixel_shader=palette)
+        self.group.append(sprite)
+        self.header=label.Label(terminalio.FONT,text="trade", color=WHITE, x=48, y=8)
+        self.group.append(self.header)
+        self.details=label.Label(terminalio.FONT,text="transmitting", color=WHITE, x=24, y=32)
+        self.group.append(self.details)
 
     def update(self):
-        #update display
-        display.header.text="trade"
+        #show trade page
+        self.group.y=8
 
-        # process keypresses
-        # if down is pressed, return to where we came from
-        if dpad.d.fell: return 0
-        # if x is pressed, restart the trade process
-        elif dpad.x.fell: 
-            state="tx"
-            count=0
+        while True:
+            #print("starting trade",self.state,self.count,self.timeout)
 
-        # process tx/rx
-        # if state is tx, transmit and increment count
-        elif state is "tx":
-            print("transmitting", count)
-            #if afer transmitting a few times, prepare to recieve
-            if count++ > retries:
-                count=0
-                state="rx"
-                #uart.reset_input_buffer()
-                timeout=ticks_ms()+5000
-        # if state is rx, recieve until valid card recieved or timeout
-        elif state is "rx":
-            print "receiving"
-            # if uart ready
-                # read data
-                # parse data
-                # if data valid:
+            # process tx/rx
+            # if state is tx, transmit and increment count
+            if self.state == "transmitting":
+                #todo: perhaps add a 100ms delay between each tx?
+                self.count += 1
+                print("transmitting", self.count)
+                self.ir.writebytes(self.mycard)
+                time.sleep(.1)
+                #afer transmitting a few times, prepare to recieve
+                if self.count > self.retries:
+                    self.count=0
+                    self.state="receiving"
+
+                    self.ir.uart.reset_input_buffer()
+                    self.timeout=ticks_ms()+5000
+
+            # if state is rx, recieve until valid card recieved or timeout
+            elif self.state == "receiving":
+                if self.ir.ready(1):
+                    rxval=self.ir.readbytes(1)
+                    # if data valid:
                     # store data
-                    # state="respond"
-                # return "trade"
-            if ticks_ms()> timeout:
-                state="respond"
-        # else state is respond, tx 3 more times
-        else
-            print("transmitting", count)
-            if count++ > retries:
-                count=0
-                state="rx"
+                    print("recieved")
+                    self.state="responding"
+                print("nothing receivd yet",self.timeout,ticks_ms())
+                if ticks_ms()> self.timeout:
+                    print("timeout")
+                    self.state="timeout"
+                time.sleep(1)
+            # else state is respond, tx 3 more times
+            elif self.state == "responding":
+                #todo: perhaps add a 100ms delay between each tx?
+                self.count += 1
+                print("transmitting", self.count)
+                self.ir.writebytes(self.mycard)
+                #afer transmitting a few times, prepare to recieve
+                if self.count > self.retries:
+                    self.count=0
+                    self.state="success"
+            else: 
+                #print(self.state)
+                #self.header.text=self.state
+                pass
+
+            # process keypresses
+            self.details.text=self.state
+            dpad.update()
+            # if down is pressed, return to where we came from
+             #todo: l for contact details, r for card details
+            if dpad.d.fell:
+                self.state="transmitting"
+                self.count=0
+                self.group.y=-64
                 return 0
-        return "trade"
+            # if u is pressed, restart the trade process
+            elif dpad.u.fell: 
+                self.state="transmitting"
+                self.count=0
 
 class sleep:
     def __init__(self, display, dpad):
@@ -129,43 +236,53 @@ class sleep:
     def update(self):
         #self.display.header.text="sleep"
         if dpad.x.fell:
-            display.splash.hidden=False
+            display.maingroup.hidden=False
             return 0 # will return to last normal page
         elif dpad.u.fell:
-            display.splash.hideden=False
+            display.maingroup.hidden=False
             return "trade"
-        display.splash.hidden=True
+        display.maingroup.hidden=True
         return "sleep"
 
-homepage=home(display,dpad)
-cardspage=cards(display,dpad)
-settingspage=settings(display,dpad)
-contactspage=contacts(display,dpad)
-tradepage=trade(display,dpad)
+homepage=home(display.homegroup,dpad)
+cardspage=cards(display.cardsgroup,dpad)
+settingspage=settings(display.settingsgroup,dpad)
+contactspage=contacts(display.contactsgroup,dpad)
+tradepage=trade(display.tradegroup,dpad)
 sleeppage=sleep(display,dpad)
-page="sleep"
+
+page="home"
 lastpage="home"
 
 while True:
     #scan inputs
+    #print("update loop:",page)
+    #time.sleep(1)
     dpad.update()
     #go to sleep if timeout
-    if dpad.duration()>5 and page is not "trade": page=sleeppage.update()
+    if dpad.duration()>10 and page != "trade": page=sleeppage.update()
     #if a button is pressed, handle it
     elif not dpad.pressed():
+    #print("sleep")
         time.sleep(0.01)
-    elif page is "home":
+    elif page == "home":
+        display.pagegroup.x=-260
         lastpage=page
         page=homepage.update()
-    elif page is "settings":
+    elif page == "settings":
+        display.pagegroup.x=0
         lastpage=page
         page=settingspage.update()
-    elif page is "contacts":
+    elif page == "contacts":
+        display.pagegroup.x=-130
         lastpage=page
         page=contactspage.update()
-    elif page is "cards":
+    elif page == "cards":
+        display.pagegroup.x=-390
         lastpage=page
         page=cardspage.update()
-    elif page is "trade": page=tradepage.update()
-    elif page is "sleep": page=sleeppage.update()
+    elif page == "trade":
+        print("update trade")
+        page=tradepage.update()
+    elif page == "sleep": page=sleeppage.update()
     else: page=lastpage
