@@ -1,6 +1,8 @@
 import board
 import digitalio
 
+#todo - add error checking
+
 class FakeIRDA:
     def __init__(self,uart=board.UART(),sd=board.D8):
         self.uart=uart
@@ -19,8 +21,8 @@ class FakeIRDA:
     # calls readbyte N times, reading 2*N bytes
     def readbytes(self,count):
         bytesread=[]
-        for i in range(count)
-            bytesread.append(readbyte())
+        for i in range(count):
+            bytesread.append(self.readbyte())
         return bytesread
 
     # takes one byte, expands it to two bytes interleved with '1's and transmits both
@@ -30,9 +32,8 @@ class FakeIRDA:
 
     # calls writebyte N times, writing 2N bytes total
     def writebytes(self,byteswrite):
-        for i in byteswrite
-            writebyte(i)
-        return bytesread
+        for i in byteswrite:
+            self.writebyte(i)
 
     # set shutdown pin to 0 to wake up phy 
     def enablePHY(self):
@@ -43,6 +44,6 @@ class FakeIRDA:
         self.shutdown.value=1
 
     #return true if uart has enough bytes waiting.
-    def ready(self):
-        return self.uart.in_waiting > 1
+    def ready(self,numbytes=1):
+        return self.uart.in_waiting >= (numbytes*2)
 
