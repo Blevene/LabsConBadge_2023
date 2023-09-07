@@ -1,15 +1,15 @@
-import board
-import digitalio
-import busio
 import time
+import board
+import busio
 import pulseio
-from five_way_pad import FiveWayPad
-from fake_irda import FakeIRDA
+import digitalio
 import displayio
+import terminalio
 import adafruit_imageload
 import adafruit_displayio_sh1106
+from fake_irda import FakeIRDA
 from sh1106_ui import sh1106ui
-import terminalio
+from five_way_pad import FiveWayPad
 from adafruit_display_text import label
 from adafruit_ticks import ticks_ms, ticks_add, ticks_less
 
@@ -51,15 +51,12 @@ class cards:
         self.card_grid = displayio.TileGrid(card_sheet, pixel_shader=palette,
             width=11, height=3,
             tile_width=12, tile_height=16)
-        card_group=displayio.Group()
-        card_group.y=15
+        card_group=displayio.Group(y=15)
         card_group.append(self.card_grid)
         self.group.append(card_group)
 
-        self.details=displayio.Group()
+        self.details=displayio.Group(x=16,y=8)
         self.details.hidden=True
-        self.details.x=16
-        self.details.y=8
         self.group.append(self.details)
 
         self.details.append(display.box(98,50,WHITE,0,0))
@@ -68,12 +65,9 @@ class cards:
         self.det=label.Label(terminalio.FONT,text="details", color=WHITE, x=4, y=8)
         self.details.append(self.det)
 
-        for i in range(3):
-            self.card_grid[i,0]=1
-        for i in range(5):
-            self.card_grid[i,1]=3
-        for i in range(4):
-            self.card_grid[i,2]=5
+        for i in range(3): self.card_grid[i,0]=1
+        for i in range(5): self.card_grid[i,1]=3
+        for i in range(4): self.card_grid[i,2]=5
         self.x=2
         self.y=2
 
@@ -101,8 +95,10 @@ class contacts:
     def __init__(self, group, dpad):
         self.dpad=dpad
         self.group=group
+
         self.header=label.Label(terminalio.FONT,text="contacts", color=BLACK, x=8, y=8)
         self.group.append(self.header)
+
         self.details=displayio.Group()
         self.details.hidden=True
         self.group.append(self.details)
@@ -156,13 +152,13 @@ class trade:
         self.dpad=dpad
         self.group=group
         self.ir=FakeIRDA()
-        
+
         self.group.append(display.box(96,48,WHITE,0,0))
         self.group.append(display.box(94,31,BLACK,1,16))
-        
+
         self.header=label.Label(terminalio.FONT,text="trade", color=BLACK, x=24, y=8)
         self.group.append(self.header)
-        
+
         self.details=label.Label(terminalio.FONT,text="transmitting", color=WHITE, x=12, y=32)
         self.group.append(self.details)
 
@@ -271,26 +267,21 @@ while True:
     if dpad.duration()>10 and page != "trade": page=sleeppage.update()
     #if a button is pressed, handle it
     elif not dpad.pressed():
-    #print("sleep")
         time.sleep(0.01)
     elif page == "home":
-        #display.pagegroup.x=-260
         lastpage=page
         page=homepage.update()
     elif page == "settings":
-        #display.pagegroup.x=0
         lastpage=page
         page=settingspage.update()
     elif page == "contacts":
-        #display.pagegroup.x=-130
         lastpage=page
         page=contactspage.update()
     elif page == "cards":
-        #display.pagegroup.x=-390
         lastpage=page
         page=cardspage.update()
     elif page == "trade":
-        print("update trade")
         page=tradepage.update()
-    elif page == "sleep": page=sleeppage.update()
+    elif page == "sleep":
+        page=sleeppage.update()
     else: page=lastpage

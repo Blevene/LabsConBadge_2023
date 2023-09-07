@@ -40,20 +40,15 @@ class sh1106ui:
         self.maingroup.append(self.box(126,1,WHITE,3,63))
         
         #make pagegroups that contains a separate group for each page
-        self.pagegroup = displayio.Group()
-        self.pagegroup.x = -260
+        self.pagegroup = displayio.Group(x=-260)
         self.maingroup.append(self.pagegroup)
-        self.settingsgroup = displayio.Group()
-        self.settingsgroup.x=4
+        self.settingsgroup = displayio.Group(x=4)
         self.pagegroup.append(self.settingsgroup)
-        self.contactsgroup = displayio.Group()
-        self.contactsgroup.x=134
+        self.contactsgroup = displayio.Group(x=134)
         self.pagegroup.append(self.contactsgroup)
-        self.homegroup = displayio.Group()
-        self.homegroup.x=264
+        self.homegroup = displayio.Group(x=264)
         self.pagegroup.append(self.homegroup)
-        self.cardsgroup = displayio.Group()
-        self.cardsgroup.x=394
+        self.cardsgroup = displayio.Group(x=394)
         self.pagegroup.append(self.cardsgroup)
         self.pagegroup.append(self.box(3,64,WHITE,000,0))
         self.pagegroup.append(self.box(4,46,WHITE,129,0))
@@ -62,9 +57,7 @@ class sh1106ui:
         self.pagegroup.append(self.box(1,64,WHITE,519,0))
 
         # make trade group overlay
-        self.tradegroup = displayio.Group()
-        self.tradegroup.y=-64
-        self.tradegroup.x=16
+        self.tradegroup = displayio.Group(x=16,y=-64)
         self.maingroup.append(self.tradegroup)
 
     def show(self,groupname):
@@ -92,4 +85,3 @@ class sh1106ui:
         color_palette = displayio.Palette(1)
         color_palette[0] = color
         return displayio.TileGrid(color_bitmap, pixel_shader=color_palette, x=x, y=y)
-
