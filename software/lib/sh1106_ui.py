@@ -42,25 +42,35 @@ class sh1106ui:
         #make pagegroups that contains a separate group for each page
         self.pagegroup = displayio.Group(x=-260)
         self.maingroup.append(self.pagegroup)
-        self.settingsgroup = displayio.Group(x=4)
-        self.pagegroup.append(self.settingsgroup)
-        self.contactsgroup = displayio.Group(x=134)
+
+        self.contactsgroup = displayio.Group(x=4)
         self.pagegroup.append(self.contactsgroup)
+
+        self.aboutgroup = displayio.Group(x=134)
+        self.pagegroup.append(self.aboutgroup)
+
         self.homegroup = displayio.Group(x=264)
         self.pagegroup.append(self.homegroup)
+
         self.cardsgroup = displayio.Group(x=394)
         self.pagegroup.append(self.cardsgroup)
+
+        self.settingsgroup = displayio.Group(x=519)
+        self.pagegroup.append(self.settingsgroup)
+
         self.pagegroup.append(self.box(3,64,WHITE,000,0))
         self.pagegroup.append(self.box(4,46,WHITE,129,0))
         self.pagegroup.append(self.box(4,64,WHITE,259,0))
         self.pagegroup.append(self.box(4,64,WHITE,389,0))
         self.pagegroup.append(self.box(1,64,WHITE,519,0))
+        self.pagegroup.append(self.box(1,64,WHITE,649,0))
 
         # make trade group overlay
         self.tradegroup = displayio.Group(x=16,y=-64)
         self.maingroup.append(self.tradegroup)
 
     def show(self,groupname):
+        print(f'{groupname} -- {self.currentgroup}')
         if groupname==self.currentgroup:
             #no change in group, but do we still need to update animation?
             if self.targetx!=self.pagegroup.x:
@@ -73,10 +83,11 @@ class sh1106ui:
             self.currentgroup=groupname
             self.starttime=ticks_ms()
             self.startx=self.pagegroup.x
-            if groupname == "settings": self.targetx=0
-            elif groupname == "contacts": self.targetx=-130
+            if groupname == "settings": self.targetx=-515
+            elif groupname == "contacts": self.targetx=0
             elif groupname == "home": self.targetx=-260
             elif groupname == "cards": self.targetx=-390
+            elif groupname == "about": self.targetx=-130
             # sleep and trade don't need to move x
             else: self.targetx=self.pagegroup.x
 
