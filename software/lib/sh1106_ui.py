@@ -40,14 +40,11 @@ class sh1106ui:
         self.maingroup.append(self.box(126,1,WHITE,3,63))
         
         #make pagegroups that contains a separate group for each page
-        self.pagegroup = displayio.Group(x=-260)
+        self.pagegroup = displayio.Group(x=-134)
         self.maingroup.append(self.pagegroup)
 
-        self.contactsgroup = displayio.Group(x=4)
+        self.contactsgroup = displayio.Group(x=134)
         self.pagegroup.append(self.contactsgroup)
-
-        self.aboutgroup = displayio.Group(x=134)
-        self.pagegroup.append(self.aboutgroup)
 
         self.homegroup = displayio.Group(x=264)
         self.pagegroup.append(self.homegroup)
@@ -69,8 +66,12 @@ class sh1106ui:
         self.tradegroup = displayio.Group(x=16,y=-64)
         self.maingroup.append(self.tradegroup)
 
+        # make trade group overlay
+        self.aboutpopupgroup = displayio.Group(x=8,y=-64)
+        self.maingroup.append(self.aboutpopupgroup)
+
     def show(self,groupname):
-        print(f'{groupname} -- {self.currentgroup}')
+        #print(f'{groupname} -- {self.currentgroup}')
         if groupname==self.currentgroup:
             #no change in group, but do we still need to update animation?
             if self.targetx!=self.pagegroup.x:
@@ -84,10 +85,9 @@ class sh1106ui:
             self.starttime=ticks_ms()
             self.startx=self.pagegroup.x
             if groupname == "settings": self.targetx=-515
-            elif groupname == "contacts": self.targetx=0
+            elif groupname == "contacts": self.targetx=-130
             elif groupname == "home": self.targetx=-260
             elif groupname == "cards": self.targetx=-390
-            elif groupname == "about": self.targetx=-130
             # sleep and trade don't need to move x
             else: self.targetx=self.pagegroup.x
 

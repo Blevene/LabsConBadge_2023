@@ -40,9 +40,9 @@ class home:
     def update(self):
         if dpad.u.fell: return "trade"
         if dpad.d.fell: return "sleep"
-        if dpad.l.fell: return "about"
+        if dpad.l.fell: return "contacts"
         if dpad.r.fell: return "cards"
-        if dpad.x.fell: self.details.hidden=not self.details.hidden
+        if dpad.x.fell: return "about" #self.details.hidden=not self.details.hidden
         return "home"
 
 class cards:
@@ -124,7 +124,7 @@ class contacts:
             if self.y==0: return "settings"
             self.y -=1
         if self.dpad.r.fell:
-            if self.y==0: return "about"
+            if self.y==0: return "home"
             self.y+=1
         if self.dpad.x.fell: self.display.details.hidden=not self.display.details.hidden
         return "contacts"
@@ -134,26 +134,32 @@ class about:
         self.dpad=dpad
         self.group=group
 
-        self.header=label.Label(terminalio.FONT,text="About - LABScon 2023", color=BLACK, x=8, y=8)
+        self.group.append(display.box(116,48,WHITE,0,0))
+        self.group.append(display.box(114,31,BLACK,1,16))
+
+        self.header=label.Label(terminalio.FONT,text="About", color=BLACK, x=24, y=8)
         self.group.append(self.header)
 
-        self.header=label.Label(terminalio.FONT,text="Hack the planet!", scale=1, color=WHITE, x=8, y=25)
-        self.group.append(self.header)
-
-        self.header=label.Label(terminalio.FONT,text="Labscon", scale=1, color=WHITE, x=8, y=42)
-        self.group.append(self.header)
-
-        self.details=displayio.Group()
-        self.details.hidden=False
+        self.details=label.Label(terminalio.FONT,text="Hack the Planet", color=WHITE, x=12, y=32)
         self.group.append(self.details)
 
     def update(self):
-        if dpad.u.fell: return "trade"
-        if dpad.d.fell: return "sleep"
-        if dpad.l.fell: return "contacts"
-        if dpad.r.fell: return "home"
-        if dpad.x.fell: self.details.hidden=not self.details.hidden
-        return "about"
+        #show trade page
+        self.group.y=8
+
+        while True:
+
+            # process keypresses
+            # if dpad.u.fell: self.group.y=-64
+            # if dpad.d.fell: self.group.y=-64
+            # if dpad.l.fell: self.group.y=-64
+            # if dpad.r.fell: self.group.y=-64
+            if dpad.x.fell or dpad.r.fell or dpad.l.fell or dpad.d.fell or dpad.u.fell: 
+                self.group.y=-64 #return "about" #self.details.hidden=not self.details.hidden
+                print("X")
+                return "home"
+            return "about"
+        
 
 class settings:
     def __init__(self, group, dpad):
@@ -284,7 +290,7 @@ cardspage=cards(display.cardsgroup,dpad)
 settingspage=settings(display.settingsgroup,dpad)
 contactspage=contacts(display.contactsgroup,dpad)
 tradepage=trade(display.tradegroup,dpad)
-aboutpage=about(display.aboutgroup,dpad)
+aboutpage=about(display.aboutpopupgroup,dpad)
 sleeppage=sleep(display,dpad)
 
 page="home"
@@ -305,7 +311,6 @@ while True:
         lastpage=page
         page=homepage.update()
     elif page == "about":
-        lastpage=page
         page=aboutpage.update()
     elif page == "settings":
         lastpage=page
