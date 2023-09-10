@@ -32,6 +32,17 @@ The real prize isn't attribution but the contacts and friends we made along the 
 ## Multiple rounds
 The first round of the game will be pretty easy with only a few trades needed to attribute. Once a game is complete, the game controller will transmit a packet to advance the game to the next round, which will propogate to everyone when they trade clues. Each round will have a different set of cards/clues and a different attack to attribute.
 
+# After the conference
+This badge can work as a simple circuitpython learning platform. The best source of information about circuitpython is available on Adafruit, including a [Welcome to CircuitPython guide](https://learn.adafruit.com/welcome-to-circuitpython/overview)
+
+The best place to start tinkering is probably with some neat light animations on the 10 RGB LEDs on the badge. Adafruit [has an example](https://github.com/adafruit/Adafruit_Learning_System_Guides/blob/main/Welcome_to_CircuitPython/code.py) on how to use these RGB LEDs.
+
+For working interactively with a python CLI, plug your badge in with a USB cable, and connect to the serial port that shows up.
+
+For writing your own circuitpython programs, you need to modify the code.py file you can find on the drive that shows up when you plug in the USB cable. Every time you save the file, the board will reset and start running your code.
+
+If you've somehow messed up your badge, you can follow the process below to flash a fresh copy of circuitypython and/or the game code.
+
 # Working with the badge
 ## Installing CircuitPython
 When the RP2040 boots, it checks for valid data in the spi flash. If it doesn't, it boots into USB bootloader mode and shows up as a drive labeled RPI-RP2. [Download and copy the .UF2 file](https://circuitpython.org/board/seeeduino_xiao_rp2040/) to the drive and it will reboot into CircuitPython.
@@ -63,11 +74,21 @@ In addition, each badge needs a unique my_cards file that contains the encrypted
 - /software/ contains the code on the badge
 - /prototype/ contains prototypes and experiments used to develop all the features used in /software
 - /controller/ contains the code that runs on the special controller badge that will manage the game
+
+### Architecture
+Most functions are wrapped inside classes with the priority to make the top level code more clean and readable versus sticking to a clean object model.
+
+All functions should be non-blocking and quick to make sure the UI doesn't get frozen and button presses don't get missed. This means stuff like checking for enough uart valid data before reading it, and scheduling timed actions based on timestamps instead of sleep() calls
+
 ### Dependencies
 - core circuitpython libraries: time,board,busio,pulseio,digitalio,displayio,terminalio
 - additional adafruit libraries in /software/lib/: debouncer, ticks, displayio_ssh1106, imageload, display_text
 
-
+### Support modules
+- Fake_IRDA.py wraps the UART interface, handles enabling/disabling the IRDA enable pin, and stuffing/unstuffing the bytes that are transmitted to work with the IRDA phy in the nonstandard way we use it
+- Five_Way_Dpad.py wraps the dpad with the Adafruit Debouncer including all setup and a few helper functions for checking all buttons at once. The non-blocking update() function needs to be run periodically to capture all button presses.
+- sh1106_ui.py wraps the I2C display interface, handles the overall display view, and creates a separate group for each of the navigation pages. The non-blocking show() function should be called periodically to make sure the correct view is displayed and to manage the transition animations
+- tbd.py wraps the functionality of the pages. The class handles initialization, managing the display view, underlying data and operations. Most of this is handled in a non-blocking update() function that returns the next state
 
 ## Screen
 
