@@ -16,21 +16,21 @@ from adafruit_ticks import ticks_ms, ticks_add, ticks_less
 BLACK=0x000000
 WHITE=0xFFFFFF
 
-class cards:
+class clues:
     def __init__(self, group, dpad):
         self.group=group
         self.dpad=dpad
 
-        self.header=label.Label(terminalio.FONT,text="cards", color=BLACK, x=8, y=8)
+        self.header=label.Label(terminalio.FONT,text="clues", color=BLACK, x=8, y=8)
         self.group.append(self.header)
 
-        card_sheet, palette = adafruit_imageload.load("assets/cards.bmp",bitmap=displayio.Bitmap, palette=displayio.Palette)
-        self.card_grid = displayio.TileGrid(card_sheet, pixel_shader=palette,
+        clue_sheet, palette = adafruit_imageload.load("assets/clues.bmp",bitmap=displayio.Bitmap, palette=displayio.Palette)
+        self.clue_grid = displayio.TileGrid(clue_sheet, pixel_shader=palette,
             width=11, height=3,
             tile_width=12, tile_height=16)
-        card_group=displayio.Group(y=15)
-        card_group.append(self.card_grid)
-        self.group.append(card_group)
+        clue_group=displayio.Group(y=15)
+        clue_group.append(self.clue_grid)
+        self.group.append(clue_group)
 
         self.details=displayio.Group(x=8,y=4)
         self.details.hidden=True
@@ -40,14 +40,14 @@ class cards:
         self.details.append(self.detaillabel)
         self.group.append(self.details)
 
-        for i in range(3): self.card_grid[i,0]=1
-        for i in range(5): self.card_grid[i,1]=3
-        for i in range(4): self.card_grid[i,2]=5
+        for i in range(3): self.clue_grid[i,0]=1
+        for i in range(5): self.clue_grid[i,1]=3
+        for i in range(4): self.clue_grid[i,2]=5
         self.x=2
         self.y=2
 
     def update(self):
-        self.card_grid[self.x,self.y]=self.y*2+1
+        self.clue_grid[self.x,self.y]=self.y*2+1
         if self.dpad.u.fell:
             if self.y==0: return "trade"
             self.y -=1
@@ -58,10 +58,10 @@ class cards:
             if self.x==0: return "home"
             self.x -=1
         if self.dpad.r.fell:
-            #todo change this to max # cards in the row
+            #todo change this to max # clues in the row
             if self.x==2: return "settings"
             self.x+=1
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
-        self.card_grid[self.x,self.y]=self.y*2+2
-        self.detaillabel.text="details of card\n at [" + str(self.x) + "," + str(self.y) + "]"
-        return "cards"
+        self.clue_grid[self.x,self.y]=self.y*2+2
+        self.detaillabel.text="details of clue\n at [" + str(self.x) + "," + str(self.y) + "]"
+        return "clues"

@@ -14,8 +14,8 @@ from adafruit_display_text import label
 from adafruit_ticks import ticks_ms, ticks_add, ticks_less
 
 from home import home
-from clues import cards
-from alibis import contacts
+from clues import clues
+from alibis import alibis
 from settings import settings
 from trade import trade
 from sleep import sleep
@@ -27,9 +27,9 @@ display=sh1106ui()
 dpad=FiveWayPad()
 
 homepage=home(display.homegroup,dpad)
-cardspage=cards(display.cardsgroup,dpad)
+cluespage=clues(display.cluesgroup,dpad)
 settingspage=settings(display.settingsgroup,dpad)
-contactspage=contacts(display.contactsgroup,dpad)
+alibispage=alibis(display.alibisgroup,dpad)
 tradepage=trade(display.tradegroup,dpad)
 sleeppage=sleep(display,dpad)
 
@@ -55,12 +55,12 @@ while True:
     elif page == "settings":
         lastpage=page
         page=settingspage.update()
-    elif page == "contacts":
+    elif page == "alibis":
         lastpage=page
-        page=contactspage.update()
-    elif page == "cards":
+        page=alibispage.update()
+    elif page == "clues":
         lastpage=page
-        page=cardspage.update()
+        page=cluespage.update()
     elif page == "trade":
         page=tradepage.update()
     elif page == "sleep":

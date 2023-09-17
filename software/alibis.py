@@ -7,12 +7,12 @@ BLACK=0x000000
 WHITE=0xFFFFFF
 
 
-class contacts:
+class alibis:
     def __init__(self, group, dpad):
         self.group=group
         self.dpad=dpad
 
-        self.header=label.Label(terminalio.FONT,text="contacts", color=BLACK, x=8, y=8)
+        self.header=label.Label(terminalio.FONT,text="alibis", color=BLACK, x=8, y=8)
         self.group.append(self.header)
 
         self.details=displayio.Group(x=8,y=4)
@@ -26,7 +26,7 @@ class contacts:
         self.details.append(self.det)
 
 
-        self.contactlist=["@securelyfitz","@blevene","@oscontext","@4","@5","@6"]
+        self.alibilist=["@securelyfitz","@blevene","@oscontext","@4","@5","@6"]
         self.x=0
         self.y=0
 
@@ -44,4 +44,4 @@ class contacts:
             if self.y==0: return "home"
             self.y+=1
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
-        return "contacts"
+        return "alibis"

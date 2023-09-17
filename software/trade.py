@@ -15,7 +15,7 @@ class trade:
     count=0
     timeout=5
     retries=3
-    mycard=[13]
+    myclue=[13]
 
     def __init__(self, group, dpad):
         self.group=group
@@ -44,7 +44,7 @@ class trade:
                 #todo: perhaps add a 100ms delay between each tx?
                 self.count += 1
                 print("transmitting", self.count)
-                self.ir.writebytes(self.mycard)
+                self.ir.writebytes(self.myclue)
                 #time.sleep(.2)
                 #afer transmitting a few times, prepare to recieve
                 if self.count > self.retries:
@@ -53,7 +53,7 @@ class trade:
                     self.ir.uart.reset_input_buffer()
                     self.timeout=ticks_ms()+5000
 
-            # if state is rx, recieve until valid card recieved or timeout
+            # if state is rx, recieve until valid clue recieved or timeout
             elif self.state == "receiving":
                 if self.ir.ready(1):
                     rxval=self.ir.readbytes(1)
@@ -74,7 +74,7 @@ class trade:
             elif self.state == "responding":
                 self.count += 1
                 print("transmitting", self.count)
-                self.ir.writebytes(self.mycard)
+                self.ir.writebytes(self.myclue)
                 #time.sleep(.2)
                 #afer transmitting a few times, prepare to recieve
                 if self.count > self.retries:
@@ -89,7 +89,7 @@ class trade:
             self.details.text=self.state+" "+str(self.count)
             self.dpad.update()
             # if down is pressed, return to where we came from
-             #todo: l for contact details, r for card details
+             #todo: l for alibi details, r for clue details
             if self.dpad.d.fell:
                 self.state="transmitting"
                 self.count=0

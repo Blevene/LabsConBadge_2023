@@ -27,7 +27,7 @@ class settings:
     def update(self):
         if self.dpad.u.fell: return "trade"
         if self.dpad.d.fell: return "sleep"
-        if self.dpad.l.fell: return "cards"
-        if self.dpad.r.fell: return "contacts"
+        if self.dpad.l.fell: return "clues"
+        if self.dpad.r.fell: return "alibis"
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
         return "settings"
