@@ -2,7 +2,7 @@ import time
 from adafruit_ticks import ticks_ms, ticks_add, ticks_less
 from adafruit_display_text import label
 from fake_irda import FakeIRDA
-from sh1106_ui import sh1106ui
+from sh1106_ui import box
 import terminalio
 import displayio
 
@@ -17,14 +17,13 @@ class trade:
     retries=3
     mycard=[13]
 
-    def __init__(self, display, group, dpad):
-        self.display=display
+    def __init__(self, group, dpad):
         self.group=group
         self.dpad=dpad
         self.ir=FakeIRDA()
 
-        self.group.append(self.display.box(96,48,WHITE,0,0))
-        self.group.append(self.display.box(94,31,BLACK,1,16))
+        self.group.append(box(96,48,WHITE,0,0))
+        self.group.append(box(94,31,BLACK,1,16))
 
         self.header=label.Label(terminalio.FONT,text="trade", color=BLACK, x=24, y=8)
         self.group.append(self.header)
@@ -34,7 +33,7 @@ class trade:
 
     def update(self):
         #show trade page
-        self.group.y=8
+        self.group.hidden=False
 
         while True:
             #print("starting trade",self.state,self.count,self.timeout)
@@ -94,7 +93,7 @@ class trade:
             if self.dpad.d.fell:
                 self.state="transmitting"
                 self.count=0
-                self.group.y=-64
+                self.group.hidden=True
                 return 0
             # if u is pressed, restart the trade process
             elif self.dpad.u.fell: 

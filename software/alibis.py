@@ -1,4 +1,5 @@
 from adafruit_display_text import label
+from sh1106_ui import box
 import terminalio
 import displayio
 
@@ -7,17 +8,23 @@ WHITE=0xFFFFFF
 
 
 class contacts:
-    def __init__(self, display, group, dpad):
-        self.display=display
+    def __init__(self, group, dpad):
         self.group=group
         self.dpad=dpad
 
         self.header=label.Label(terminalio.FONT,text="contacts", color=BLACK, x=8, y=8)
         self.group.append(self.header)
 
-        self.details=displayio.Group()
+        self.details=displayio.Group(x=8,y=4)
         self.details.hidden=True
         self.group.append(self.details)
+
+        self.details.append(box(112,56,WHITE,0,0))
+        self.details.append(box(110,54,BLACK,1,1))
+
+        self.det=label.Label(terminalio.FONT,text="details", color=WHITE, x=4, y=8)
+        self.details.append(self.det)
+
 
         self.contactlist=["@securelyfitz","@blevene","@oscontext","@4","@5","@6"]
         self.x=0
