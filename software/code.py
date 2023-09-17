@@ -26,6 +26,20 @@ WHITE=0xFFFFFF
 display=sh1106ui()
 dpad=FiveWayPad()
 
+
+#if not (load name and current game from file)
+    #"Welcome to the Attribution Game!"
+    #"Meet people and trade clues to attribute the attack"
+    #"You don't have a handle yet"
+    #"Your handle will be shared with people you meet"
+    #" ^v to choose characters > for next"
+    #"welcome to the game @user"
+    #"press ^ and point your badge at someone else to trade"
+    #"the combo with no alibi is the solution."
+    #"have fun!"
+#load game data from file
+#load contacts from file
+
 homepage=home(display.homegroup,dpad)
 cluespage=clues(display.cluesgroup,dpad)
 settingspage=settings(display.settingsgroup,dpad)

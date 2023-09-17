@@ -28,9 +28,9 @@ class clues:
         self.clue_grid = displayio.TileGrid(clue_sheet, pixel_shader=palette,
             width=11, height=3,
             tile_width=12, tile_height=16)
-        clue_group=displayio.Group(y=15)
-        clue_group.append(self.clue_grid)
-        self.group.append(clue_group)
+        self.clue_group=displayio.Group(y=15)
+        self.clue_group.append(self.clue_grid)
+        self.group.append(self.clue_group)
 
         self.details=displayio.Group(x=8,y=4)
         self.details.hidden=True
@@ -40,6 +40,7 @@ class clues:
         self.details.append(self.detaillabel)
         self.group.append(self.details)
 
+        #for i to len(t,a,v)= blank card
         for i in range(3): self.clue_grid[i,0]=1
         for i in range(5): self.clue_grid[i,1]=3
         for i in range(4): self.clue_grid[i,2]=5
@@ -47,19 +48,28 @@ class clues:
         self.y=2
 
     def update(self):
+        self.clue_group.hidden=False
         self.clue_grid[self.x,self.y]=self.y*2+1
         if self.dpad.u.fell:
-            if self.y==0: return "trade"
+            if self.y==0: 
+                self.clue_group.hidden=True
+                return "trade"
             self.y -=1
         if self.dpad.d.fell:
-            if self.y==2: return "sleep"
+            if self.y==2: 
+                self.clue_group.hidden=True
+                return "sleep"
             self.y +=1
         if self.dpad.l.fell:
-            if self.x==0: return "home"
+            if self.x==0:
+                self.clue_group.hidden=True
+                return "home"
             self.x -=1
         if self.dpad.r.fell:
             #todo change this to max # clues in the row
-            if self.x==2: return "settings"
+            if self.x==2:
+                self.clue_group.hidden=True
+                return "settings"
             self.x+=1
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
         self.clue_grid[self.x,self.y]=self.y*2+2

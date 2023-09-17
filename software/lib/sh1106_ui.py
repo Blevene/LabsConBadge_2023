@@ -40,7 +40,7 @@ class sh1106ui:
         self.maingroup.append(box(126,1,WHITE,3,63))
         
         #make pagegroups that contains a separate group for each page
-        self.pagegroup = displayio.Group(x=-264)
+        self.pagegroup = displayio.Group(x=-260)
         self.maingroup.append(self.pagegroup)
 
         self.settingsgroup = displayio.Group(x=4)
