@@ -90,10 +90,10 @@ class clues:
             if self.game.attacks[self.x][3] == "":
                 self.detaillabel.text="It could have been\n"+self.game.attacks[self.x][1]
             else:
-                self.detaillabel.text=self.game.threats[self.x][4]+"\n said they didn't use\n"+self.game.threats[self.x][1]
+                self.detaillabel.text=self.game.attacks[self.x][4]+"\n said they didn't use\n"+self.game.attacks[self.x][1]
         elif self.y==2:
             if self.game.victims[self.x][3] == "":
                 self.detaillabel.text="It could have been\n"+self.game.victims[self.x][1]
             else:
-                self.detaillabel.text=self.game.threats[self.x][4]+" said\n"+self.game.threats[self.x][1]+"\nwasn't the victim"
+                self.detaillabel.text=self.game.victims[self.x][4]+" said\n"+self.game.victims[self.x][1]+"\nwasn't the victim"
         return "clues"

@@ -6,7 +6,7 @@ import digitalio
 class FakeIRDA:
     def __init__(self,uart=board.UART(),sd=board.D8):
         self.uart=uart
-        self.uart.baudrate=400000
+        self.uart.baudrate=350000
         self.shutdown=digitalio.DigitalInOut(sd)
         self.shutdown.switch_to_output()
         self.shutdown.value=1
@@ -17,15 +17,15 @@ class FakeIRDA:
         rxval=self.uart.read(2)
         if (rxval is not None) and (len(rxval)==2):
             print(rxval,rxval[0] & (rxval[1]>>1|128))
-            return rxval[0] & (rxval[1]>>1|128)
+            return chr(rxval[0] & (rxval[1]>>1|128))
 
     # calls readbyte N times, reading 2*N bytes
     def readbytes(self,count=None):
-        bytesread=[]
+        bytesread=""
         if count == None:
             byte = self.readbyte()
             while byte is not None:
-                bytesread.append(byte)
+                bytesread+=byte
                 print("read",byte,"one more byte?")
                 byte = self.readbyte()
                 pass

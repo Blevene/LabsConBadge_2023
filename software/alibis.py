@@ -15,6 +15,9 @@ class alibis:
         self.header=label.Label(terminalio.FONT,text="alibis", color=BLACK, x=8, y=8)
         self.group.append(self.header)
 
+        self.contents=label.Label(terminalio.FONT, scale=1, color=WHITE, x=8, y=24)
+        self.group.append(self.contents)
+
         self.details=displayio.Group(x=8,y=4)
         self.details.hidden=True
         self.group.append(self.details)

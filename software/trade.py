@@ -15,7 +15,7 @@ class trade:
     count=0
     timeout=5
     retries=0
-    myclue="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    myclue="Rope"
 
     def __init__(self, group, dpad, game):
         self.group=group
@@ -58,7 +58,10 @@ class trade:
             elif self.state == "receiving":
                 if self.ir.ready(1):
                     rxval=self.ir.readbytes()
-                    if self.game.check_clue(str(rxval),"other"):
+                    print(type(rxval),rxval)
+                    print(type(rxval[0]),rxval[0])
+                    print("".join(rxval))
+                    if self.game.check_clue(rxval,"other"):
                         print("recieved")
                         self.count=3
                         self.state="responding"
@@ -74,7 +77,7 @@ class trade:
             elif self.state == "responding":
                 self.count += 1
                 print("transmitting", self.count)
-                self.ir.writebytes(self.myclue)
+                self.ir.writebytes(bytearray(self.myclue))
                 #time.sleep(.2)
                 #afer transmitting a few times, prepare to recieve
                 if self.count > self.retries:
