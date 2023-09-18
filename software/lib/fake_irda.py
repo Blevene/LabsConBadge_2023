@@ -15,12 +15,21 @@ class FakeIRDA:
     def readbyte(self):
         self.enablePHY()
         rxval=self.uart.read(2)
-        if rxval is not None:
+        if (rxval is not None) and (len(rxval)==2):
+            print(rxval,rxval[0] & (rxval[1]>>1|128))
             return rxval[0] & (rxval[1]>>1|128)
 
     # calls readbyte N times, reading 2*N bytes
-    def readbytes(self,count):
+    def readbytes(self,count=None):
         bytesread=[]
+        if count == None:
+            byte = self.readbyte()
+            while byte is not None:
+                bytesread.append(byte)
+                print("read",byte,"one more byte?")
+                byte = self.readbyte()
+                pass
+            return bytesread
         for i in range(count):
             bytesread.append(self.readbyte())
         return bytesread
@@ -29,6 +38,7 @@ class FakeIRDA:
     def writebyte(self,txval):
         self.enablePHY()
         self.uart.write(bytes([txval|85,(((txval<<1)|85)%256)]))
+        print(bytes([txval|85,(((txval<<1)|85)%256)]),txval)
 
     # calls writebyte N times, writing 2N bytes total
     def writebytes(self,byteswrite):

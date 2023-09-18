@@ -14,13 +14,14 @@ class trade:
     state="transmitting"
     count=0
     timeout=5
-    retries=3
-    myclue=[13]
+    retries=0
+    myclue="ABCDEFGHIJKLMNOPQRSTUVWXYZ"
 
-    def __init__(self, group, dpad):
+    def __init__(self, group, dpad, game):
         self.group=group
         self.dpad=dpad
         self.ir=FakeIRDA()
+        self.game=game
 
         self.group.append(box(96,48,WHITE,0,0))
         self.group.append(box(94,31,BLACK,1,16))
@@ -44,7 +45,7 @@ class trade:
                 #todo: perhaps add a 100ms delay between each tx?
                 self.count += 1
                 print("transmitting", self.count)
-                self.ir.writebytes(self.myclue)
+                self.ir.writebytes(bytearray(self.myclue))
                 #time.sleep(.2)
                 #afer transmitting a few times, prepare to recieve
                 if self.count > self.retries:
@@ -56,19 +57,18 @@ class trade:
             # if state is rx, recieve until valid clue recieved or timeout
             elif self.state == "receiving":
                 if self.ir.ready(1):
-                    rxval=self.ir.readbytes(1)
-                    # if data valid:
-                    # store data
-                    print("recieved")
-                    self.count=3
-                    self.state="responding"
-                    time.sleep(.5)
+                    rxval=self.ir.readbytes()
+                    if self.game.check_clue(str(rxval),"other"):
+                        print("recieved")
+                        self.count=3
+                        self.state="responding"
+                        time.sleep(.5)
                 elif ticks_ms()> self.timeout:
                     print("timeout")
                     self.state="timeout"
                 else:
                     self.count=(self.timeout - ticks_ms()) // 1000
-                    print("nothing receivd yet",self.timeout,ticks_ms())
+                    print("nothing received yet",self.timeout,ticks_ms())
                     time.sleep(.5)
             # else state is respond, tx 3 more times
             elif self.state == "responding":

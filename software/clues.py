@@ -17,9 +17,10 @@ BLACK=0x000000
 WHITE=0xFFFFFF
 
 class clues:
-    def __init__(self, group, dpad):
+    def __init__(self, group, dpad, game):
         self.group=group
         self.dpad=dpad
+        self.game=game
 
         self.header=label.Label(terminalio.FONT,text="clues", color=BLACK, x=8, y=8)
         self.group.append(self.header)
@@ -41,25 +42,32 @@ class clues:
         self.group.append(self.details)
 
         #for i to len(t,a,v)= blank card
-        for i in range(3): self.clue_grid[i,0]=1
-        for i in range(5): self.clue_grid[i,1]=3
-        for i in range(4): self.clue_grid[i,2]=5
-        self.x=2
-        self.y=2
+        self.cluecounts=[len(self.game.threats),len(self.game.attacks),len(self.game.victims)]
+        for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
+        #for j in range(len(self.cluecounts)):
+            for i in range(self.cluecounts[j]):
+                self.clue_grid[i,j]=7
+                print(cluetype[i][3])
+                if cluetype[i][3] != "": self.clue_grid[i,j]=j*2+1
+        self.x=0
+        self.y=0
+        self.clue_grid[self.x,self.y]+=1
 
     def update(self):
         self.clue_group.hidden=False
-        self.clue_grid[self.x,self.y]=self.y*2+1
+        self.clue_grid[self.x,self.y]-=1
         if self.dpad.u.fell:
             if self.y==0: 
                 self.clue_group.hidden=True
                 return "trade"
             self.y -=1
+            self.x=min(self.x,self.cluecounts[self.y]-1)
         if self.dpad.d.fell:
             if self.y==2: 
                 self.clue_group.hidden=True
                 return "sleep"
             self.y +=1
+            self.x=min(self.x,self.cluecounts[self.y]-1)
         if self.dpad.l.fell:
             if self.x==0:
                 self.clue_group.hidden=True
@@ -67,11 +75,25 @@ class clues:
             self.x -=1
         if self.dpad.r.fell:
             #todo change this to max # clues in the row
-            if self.x==2:
+            if self.x==self.cluecounts[self.y]-1:
                 self.clue_group.hidden=True
                 return "settings"
             self.x+=1
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
-        self.clue_grid[self.x,self.y]=self.y*2+2
-        self.detaillabel.text="details of clue\n at [" + str(self.x) + "," + str(self.y) + "]"
+        self.clue_grid[self.x,self.y]+=1
+        if self.y==0:
+            if self.game.threats[self.x][3] == "":
+                self.detaillabel.text="It could have been\n"+self.game.threats[self.x][1]
+            else:
+                self.detaillabel.text=self.game.threats[self.x][4]+" said\n"+self.game.threats[self.x][1]+"\ndidn't do it"
+        elif self.y==1:
+            if self.game.attacks[self.x][3] == "":
+                self.detaillabel.text="It could have been\n"+self.game.attacks[self.x][1]
+            else:
+                self.detaillabel.text=self.game.threats[self.x][4]+"\n said they didn't use\n"+self.game.threats[self.x][1]
+        elif self.y==2:
+            if self.game.victims[self.x][3] == "":
+                self.detaillabel.text="It could have been\n"+self.game.victims[self.x][1]
+            else:
+                self.detaillabel.text=self.game.threats[self.x][4]+" said\n"+self.game.threats[self.x][1]+"\nwasn't the victim"
         return "clues"

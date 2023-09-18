@@ -19,6 +19,7 @@ from alibis import alibis
 from settings import settings
 from trade import trade
 from sleep import sleep
+from game import gamedata
 
 BLACK=0x000000
 WHITE=0xFFFFFF
@@ -26,6 +27,7 @@ WHITE=0xFFFFFF
 display=sh1106ui()
 dpad=FiveWayPad()
 
+game=gamedata(1)
 
 #if not (load name and current game from file)
     #"Welcome to the Attribution Game!"
@@ -41,10 +43,10 @@ dpad=FiveWayPad()
 #load contacts from file
 
 homepage=home(display.homegroup,dpad)
-cluespage=clues(display.cluesgroup,dpad)
+cluespage=clues(display.cluesgroup,dpad,game)
 settingspage=settings(display.settingsgroup,dpad)
 alibispage=alibis(display.alibisgroup,dpad)
-tradepage=trade(display.tradegroup,dpad)
+tradepage=trade(display.tradegroup,dpad,game)
 sleeppage=sleep(display,dpad)
 
 page="sleep"
