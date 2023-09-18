@@ -17,10 +17,16 @@ sd.switch_to_output()
 sd.value=0
 
 uart = board.UART()
-uart.baudrate=400000
+uart.baudrate=350000
 while True:
-    if uart.in_waiting > 0:
+    if uart.in_waiting > 1:
         rxval=uart.read(2)
         print("rx",rxval[0] & (rxval[1]>>1|128),"[",rxval[0],",",rxval[1],"]")
         #print("big","{:08b}".format(int.from_bytes(uart.read(1),"big")))
         #print(int.from_bytes(uart.read(1)))
+
+while True:
+    if uart.in_waiting > 0:
+        rxval=uart.read(1)
+        print(rxval[0])#,rxval[0]&85,(rxval[0]>>1)&85)
+    
