@@ -1,0 +1,35 @@
+[Threats]
+Social Engineering
+Ransomware
+Man-in-the-Middle Attacks
+SQL Injection
+Zero-Day Exploits
+Phishing
+Malware
+Credential Stuffing
+SIM Swapping
+Drive-By Downloads
+
+[Attackers]
+Russia
+Iran
+China
+North Korea
+Syria
+Elbrus
+Fin12
+Periwinkle Tempest
+Night Tsunami
+Strawberry Tempest
+
+[Victims]
+Ministry of Foreign Affairs
+Microsoft
+Adobe
+Google
+Meta
+NATO
+United Nations
+Council of Europe
+Fox News
+Office of the Prime Minister
