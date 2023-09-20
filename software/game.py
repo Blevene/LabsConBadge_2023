@@ -64,6 +64,10 @@ class gamedata:
             print("Error reading name from data/myname.txt")
             self.myname="unknown"
 
+    def wipe_name(self): 
+        self.myname=""
+        self.write_name()
+
     def write_name(self):
         try:
             fhandle = open("data/myname.txt", 'w')
@@ -114,7 +118,6 @@ class gamedata:
                 self.alibis = [line.strip() for line in file]
         except OSError:
             print("Error reading alibis.txt")
-            self.alibis=[myname,"@securelyfitz","@blevene","@oscontext"]
 
     def wipe_alibis(self):
         self.alibis=[self.myname]
