@@ -1,6 +1,6 @@
 import circuitpython_csv
 
-#todo test file write
+#musttodo test file write
 #todo make alibis a csv of contact,[clues,...]
 
 class gamedata:
@@ -42,7 +42,7 @@ class gamedata:
         return False 
     
     def is_solved(self):
-        #todo solution checking and reporting
+        #musttodo solution checking and reporting
         #for t in threats:# for t,a,v
             # for each clue
                 # if clue is null append to suspects

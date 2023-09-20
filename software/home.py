@@ -8,6 +8,8 @@ WHITE=0xFFFFFF
 
 class home:
     currentstring=0
+    #todo: fix strings, add sponsors
+    #todo: sponsor images
     strings=[
             "< - > change view\n^ - v to trade\nPress for more",
             "Page 2",
@@ -27,6 +29,8 @@ class home:
 
     def update(self):
         self.contents.hidden=False
+        #todo: make display auto-advance
+        #todo: don't sleep till done?
         if self.dpad.u.fell: 
             self.contents.hidden=True
             return "trade"

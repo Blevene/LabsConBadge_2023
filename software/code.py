@@ -29,7 +29,9 @@ display=sh1106ui()
 dpad=FiveWayPad()
 
 game=gamedata(1)
+#musttodo advance game numbers
 
+#musttodo oob experience
 #if not (load name and current game from file)
     #"Welcome to the Attribution Game!"
     #"Meet people and trade clues to attribute the attack"
@@ -42,6 +44,8 @@ game=gamedata(1)
     #"have fun!"
 #load game data from file
 #load contacts from file
+
+#musttodo add nepoixels
 
 homepage=home(display.homegroup,dpad)
 cluespage=clues(display.cluesgroup,dpad,game)

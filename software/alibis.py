@@ -34,7 +34,8 @@ class alibis:
         self.contents.text +="> "+self.game.alibis[self.x]
         self.contents.text = "" if self.x == len(self.game.alibis) else self.game.alibis[self.x+1]
         self.contents.hidden=False
-        #todo: setup detail screen
+        self.det.text=self.game.alibis[self.x]
+        #todo add more detail to detail screen
         if self.dpad.u.fell:
             if self.x==0: 
                 self.contents.hidden=True

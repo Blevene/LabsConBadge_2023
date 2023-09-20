@@ -35,7 +35,8 @@ class settings:
         self.contents.text +="> "+self.settings[self.x]
         self.contents.text = "" if self.x == len(self.settings) else self.settings[self.x+1]
         self.contents.hidden=False
-        #todo: setup detail screen
+        self.det.text=self.settings[self.x]
+        #musttodo: attach to functions
         if self.dpad.u.fell:
             self.x -=(self.x+1)%len(self.settings)
         if self.dpad.d.fell:
