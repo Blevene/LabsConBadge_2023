@@ -47,7 +47,7 @@ class clues:
         #for j in range(len(self.cluecounts)):
             for i in range(self.cluecounts[j]):
                 self.clue_grid[i,j]=7
-                print(cluetype[i][3])
+                #print(cluetype[i][3])
                 if cluetype[i][3] != "": self.clue_grid[i,j]=j*2+1
         self.x=0
         self.y=0
@@ -83,17 +83,17 @@ class clues:
         self.clue_grid[self.x,self.y]+=1
         if self.y==0:
             if self.game.threats[self.x][3] == "":
-                self.detaillabel.text="It could have been\n"+self.game.threats[self.x][1]
+                self.detaillabel.text="Could've been\n"+self.game.threats[self.x][1]
             else:
-                self.detaillabel.text=self.game.threats[self.x][4]+" said\n"+self.game.threats[self.x][1]+"\ndidn't do it"
+                self.detaillabel.text=self.game.threats[self.x][4]+"\n  said it wasn't\n"+self.game.threats[self.x][1]
         elif self.y==1:
             if self.game.attacks[self.x][3] == "":
-                self.detaillabel.text="It could have been\n"+self.game.attacks[self.x][1]
+                self.detaillabel.text="Could've been\n"+self.game.attacks[self.x][1]
             else:
-                self.detaillabel.text=self.game.attacks[self.x][4]+"\n said they didn't use\n"+self.game.attacks[self.x][1]
+                self.detaillabel.text=self.game.attacks[self.x][4]+"\n  said it wasn't\n"+self.game.attacks[self.x][1]
         elif self.y==2:
             if self.game.victims[self.x][3] == "":
-                self.detaillabel.text="It could have been\n"+self.game.victims[self.x][1]
+                self.detaillabel.text="Could've been\n"+self.game.victims[self.x][1]
             else:
-                self.detaillabel.text=self.game.victims[self.x][4]+" said\n"+self.game.victims[self.x][1]+"\nwasn't the victim"
+                self.detaillabel.text=self.game.victims[self.x][4]+"\n  said it wasn't\n"+self.game.victims[self.x][1]
         return "clues"
