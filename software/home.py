@@ -2,9 +2,12 @@ from adafruit_display_text import label
 from sh1106_ui import box
 import terminalio
 import displayio
+import random
 
 BLACK=0x000000
 WHITE=0xFFFFFF
+
+nList = ["Phishing",  "Malware",  "Ransomware",  "Spoofing",  "Encryption",  "Adware",  "0day",  "hashes",  "Bot",  "Botnets",  "DDoS",  "Firewall",  "Payload",  "White hat",  "Rootkit",  "Worm",  "Cloaking",  "Eavesdropping",  "SQL",  "XSS",  "Backdoor",  "Doxing",  "Keystroke",  "Botnet",  "Blacklisting",  "Attack",  "Authentication",  "Backup",  "Blackhat",  "Code injection",  "Exploit",  "Patch",  "Spam",  "URL injection",  "CSRF",  "APT",  "Jags",  "Ajax",  "Security Team",  "Alibaba",  "Admin338",  "1.php",  "Arid", "Viper",  "FANCY",  "PANDA",  "SPIDER",  "BEAR",  "CHOLLIMA",  "KITTEN",  "EAGLE",  "QRCode",  "Berserk",  "VOODOO",  "SANDW0RM",  "Bluenoroff",  "Group",  "Team",  "RedBull",  "Twitter",  "Agency"]
 
 class home:
     currentstring=0
@@ -96,7 +99,6 @@ class home:
                 except OSError as e:
                     print(e)
                 return "".join(playername)
-
 
     def update(self):
         self.contents.hidden=False
