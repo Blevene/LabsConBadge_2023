@@ -10,9 +10,10 @@ WHITE=0xFFFFFF
 class settings:
     settings=["LED pattern","Change Name","Clear Clues","Clear Contacts"]
 
-    def __init__(self, group, dpad):
+    def __init__(self, group, dpad, game):
         self.group=group
         self.dpad=dpad
+        self.game=game
 
         self.header=label.Label(terminalio.FONT,text="Settings", color=BLACK, x=8, y=8)
         self.group.append(self.header)
@@ -31,20 +32,48 @@ class settings:
         self.x=0
 
     def update(self):
-        self.contents.text = "" if self.x == 0 else self.setting[self.x-1]
-        self.contents.text +="> "+self.settings[self.x]
-        self.contents.text = "" if self.x == len(self.settings) else self.settings[self.x+1]
+        newtext= "" if self.x == 0 else self.settings[self.x-1]
+        newtext+="\n> "+self.settings[self.x]+"\n"
+        newtext+= "" if self.x == len(self.settings)-1 else self.settings[self.x+1]
+        self.contents.text=newtext
         self.contents.hidden=False
         self.det.text=self.settings[self.x]
         #musttodo: attach to functions
         if self.dpad.u.fell:
-            self.x -=(self.x+1)%len(self.settings)
+            self.x =(self.x-1)%len(self.settings)
         if self.dpad.d.fell:
-            self.x +=(self.x+1)%len(self.settings)
+            self.x =(self.x+1)%len(self.settings)
         if self.dpad.l.fell:
             return "clues"
         if self.dpad.r.fell:
             return "alibis"
         if self.dpad.x.fell:
-            self.details.hidden=not self.details.hidden
+            if self.details.hidden==True:
+                if self.x==0:
+                    #advance to next led mode
+                    pass
+                elif self.x==1:
+                    pass
+                    #change name by running oob code
+                elif self.x==2:
+                    self.det.text="Wipe ALL clues?\n'<' cancel\n'>' wipe"
+                    self.details.hidden=False
+                    while self.details.hidden==False:
+                        self.dpad.update()
+                        if self.dpad.l.fell:
+                            self.details.hidden=True
+                        if self.dpad.r.fell:
+                            self.game.wipe_clues()
+                            self.det.text="Clues Wiped!\n'<' to return"
+                elif self.x==3:
+                    self.det.text="Wipe all Alibis?\n'<' cancel\n'>' wipe"
+                    self.details.hidden=False
+                    while self.details.hidden==False:
+                        self.dpad.update()
+                        if self.dpad.l.fell:
+                            self.details.hidden=True
+                        if self.dpad.r.fell:
+                            self.game.wipe_alibis()
+                            self.det.text="Alibis Wiped!\n'<' to return"
+                    #clear contacts
         return "settings"

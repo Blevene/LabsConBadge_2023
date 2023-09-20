@@ -62,7 +62,7 @@ class sh1106ui:
         self.pagegroup.append(box(1,64,WHITE,519,0))
 
         # make trade group overlay, hidden by default
-        self.tradegroup = displayio.Group(x=16,y=8)
+        self.tradegroup = displayio.Group(x=8,y=0)
         self.tradegroup.hidden=True
         self.maingroup.append(self.tradegroup)
 

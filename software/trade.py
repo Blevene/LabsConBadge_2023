@@ -20,8 +20,8 @@ class trade:
         self.ir=FakeIRDA()
         self.game=game
 
-        self.group.append(box(112,56,WHITE,0,0))
-        self.group.append(box(110,54,BLACK,1,16))
+        self.group.append(box(112,64,WHITE,0,0))
+        self.group.append(box(110,47,BLACK,1,16))
 
         self.header=label.Label(terminalio.FONT,text="trade", color=BLACK, x=4, y=8)
         self.group.append(self.header)
@@ -44,7 +44,7 @@ class trade:
             # if state is tx, transmit
             if self.state == "transmitting":
                 print("transmitting")
-                self.details.text="transmitting"
+                self.details.text="transmitting..."
                 self.ir.writebytes(bytearray(self.game.myclue+","+self.game.myname))
                 self.state="receiving"
                 self.timeout=ticks_ms()+5000
@@ -61,38 +61,33 @@ class trade:
                         if self.rxclue is not None and self.rxname is not None and self.game.check_clue(self.rxclue,self.rxname):
                             print("recieved")
                             self.state="responding"
-                    else:
-                        self.state="error"
+                        else:
+                            print("recieve error")
+                            self.state="error"
+                            self.details.text="receive error :(\n^ try again\nv cancel"
                 elif ticks_ms()> self.timeout:
                     print("timeout")
                     self.state="timeout"
+                    self.details.text="timeout :(\n^ try again\nv cancel"
                 else:
-                    self.details.text="receiving"+str((self.timeout - ticks_ms()) // 1000)
+                    self.details.text="receiving "+str((self.timeout - ticks_ms()) // 1000)
                     print("nothing received yet",self.timeout,ticks_ms())
-                    #time.sleep(.5)
             # if state is respond, tx 1 time
             elif self.state == "responding":
-                print("transmitting")
+                print("responding")
                 self.details.text="responding"
                 self.ir.writebytes(bytearray(self.game.myclue+","+self.game.myname))
                 self.state="success"
-            elif self.state =="success":
                 print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
-                self.details.text=i"< "self.rxname+" \nsaid it wasn't\n >"+self.rxclue
-            elif self.state =="error":
-                print("recieve error")
-                self.details.text="receive error :(\n^ try agains\nv cancel"
-            else:
-                print("timeout")
-                self.details.text="timeout :(\n^ try agains\nv cancel"
+                self.details.text="< "+self.rxname+" \nsaid it wasn't\n >"+self.rxclue
                 
             # process keypresses
             self.dpad.update()
             # if down is pressed, return to where we came from
             retval=None
             if self.dpad.d.fell: retval=0
-            if state==success and self.dpad.l.fell: retval="alibis"
-            if state==success and self.dpad.r.fell: retval="clues"
+            if self.state=="success" and self.dpad.l.fell: retval="alibis"
+            if self.state=="success" and self.dpad.r.fell: retval="clues"
             if retval is not None:
                 self.ir.disablePHY()
                 self.state="transmitting"

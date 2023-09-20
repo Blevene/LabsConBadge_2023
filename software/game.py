@@ -8,6 +8,10 @@ class gamedata:
     myclue=None
     myname=None
     newclue=None
+    namefile="data/myname.txt"
+    gamefile="data/game1.csv"
+    alibifile="data/alibis.txt"
+
     threats=[]
     attacks=[]
     victims=[]
@@ -16,15 +20,16 @@ class gamedata:
         self.gamenum=gamenum
         self.read_name()
         self.read_alibis()
-        self.read_clues("data/game"+str(gamenum)+".csv")
+        self.gamefile="data/game"+str(gamenum)+".csv"
+        self.read_clues()
         self.cluecounts=[len(self.threats),len(self.attacks),len(self.victims)]
-        self.check_clue(self.myclue,"I")
+        self.check_clue(self.myclue,self.myname)
 
     def check_clue(self,newclue,alibi):
         # todo: check signature
         # todo: remove duplicates in alibis
         #print(newclue,alibi)
-        alibis.append(alibi)
+        self.alibis.append(alibi)
 
 #        for clue in (self.threats+self.attacks+self.victims):
 #            if clue[1] == newclue: 
@@ -32,12 +37,11 @@ class gamedata:
 #                clue[4] = alibi
 #                self.newclue=newclue
 #                return newclue
-        for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
+        for j, cluetype in enumerate([self.threats,self.attacks,self.victims]):
             for i in range(self.cluecounts[j]):
                 if cluetype[i][1]==newclue:
-                    cluetype[i][3]=newclue:
-                    cluetype[i][3]=alibi:
-                    newclue=[i,j]
+                    cluetype[i][3]=newclue
+                    self.newclue=[i,j]
                     return newclue
         return False 
     
@@ -56,23 +60,23 @@ class gamedata:
                 self.myname=file.readline().rstrip()
                 print("hello",self.myname)
         except OSError:
-            print("Error reading name from file")
+            print("Error reading name from data/myname.txt")
             self.myname="unknown"
 
-    def write_name(self)
+    def write_name(self):
         try:
             fhandle = open("data/myname.txt", 'w')
-            fhandle.write(self.name))
+            fhandle.write(self.name)
             fhandle.close()
         except OSError:
             print("Error writing name file")
             return False
         return True
 
-    def read_clues(self,filename):
+    def read_clues(self):
         #should only be called by constructor at powerup
         try:
-            with open(filename, 'r') as file:
+            with open(self.gamefile, 'r') as file:
                 csv=circuitpython_csv.reader(file)
                 for row in csv:
                     if row[0] == "T":self.threats.append(row)
@@ -80,24 +84,26 @@ class gamedata:
                     elif row[0] == "V":self.victims.append(row)
                     elif row[0] == "*":self.myclue=row[1]
         except OSError:
-            print("Error reading from file:", filename)
+            print("Error reading from file:", self.gamefile)
     
     def wipe_clues(self):
-        for cluetype in [self.threats,self.attacks,self.victims]
-            for clue in cluetype
-                if clue!=self.myclue
+        for cluetype in [self.threats,self.attacks,self.victims]:
+            for clue in cluetype:
+                if clue!=self.myclue:
                     clue[3]=""
                     clue[4]=""
-        write_clues():
+        self.newclue=-1
+        self.check_clue(self.myclue,self.myname)
+        self.write_clues()
 
     def write_clues(self):
         #should be called every time we add a clue?
         try:
-            fhandle = open(filename, 'w')
+            fhandle = open(self.gamefile, 'w')
             fhandle.write("\n".join(collection))
             fhandle.close()
         except OSError:
-            print("Error writing clues file:", filename)
+            print("Error writing clues file:", self.gamefile)
             return False
         return True
 
@@ -110,10 +116,10 @@ class gamedata:
             self.alibis=[myname,"@securelyfitz","@blevene","@oscontext"]
 
     def wipe_alibis(self):
-        self.aibis=[myname]
+        self.alibis=[self.myname]
         self.write_alibis()
 
-    def write_alibis(self)
+    def write_alibis(self):
         try:
             fhandle = open("data/alibis.txt", 'w')
             fhandle.write("\n".join(alibis))

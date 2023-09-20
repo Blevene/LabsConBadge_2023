@@ -30,24 +30,17 @@ class alibis:
         self.x=0
 
     def update(self):
-        self.contents.text = "" if self.x == 0 else self.game.alibis[self.x-1]
-        self.contents.text +="> "+self.game.alibis[self.x]
-        self.contents.text = "" if self.x == len(self.game.alibis) else self.game.alibis[self.x+1]
+        newtext="" if self.x == 0 else self.game.alibis[self.x-1]
+        newtext+="\n> "+self.game.alibis[self.x]+"\n"
+        newtext+= "" if self.x == len(self.game.alibis)-1 else self.game.alibis[self.x+1]
+        self.contents.text=newtext
         self.contents.hidden=False
         self.det.text=self.game.alibis[self.x]
         #todo add more detail to detail screen
         if self.dpad.u.fell:
-            if self.x==0: 
-                self.contents.hidden=True
-                self.details.hidden=True
-                return "trade"
-            self.x -=1
+            self.x =(self.x-1)%len(self.game.alibis)
         if self.dpad.d.fell:
-            if self.x>=len(self.game.alibis):
-                self.contents.hidden=True
-                self.details.hidden=True
-                return "sleep"
-            self.x +=1
+            self.x =(self.x+1)%len(self.game.alibis)
         if self.dpad.l.fell:
             self.contents.hidden=True
             self.details.hidden=True
