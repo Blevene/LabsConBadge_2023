@@ -75,7 +75,7 @@ alibispage=alibis(display.alibisgroup,dpad,game)
 tradepage=trade(display.tradegroup,dpad,game)
 sleeppage=sleep(display,dpad)
 
-page="sleep"
+page="home"
 lastpage="home"
 SLEEPTIMEOUT=90
 while True:

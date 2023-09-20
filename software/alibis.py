@@ -35,7 +35,7 @@ class alibis:
         newtext+= "" if self.x == len(self.game.alibis)-1 else self.game.alibis[self.x+1]
         self.contents.text=newtext
         self.contents.hidden=False
-        self.det.text=self.game.alibis[self.x]
+        self.det.text=self.game.alibis[self.x]+"\n\nNothing else to see here"
         #todo add more detail to detail screen
         if self.dpad.u.fell:
             self.x =(self.x-1)%len(self.game.alibis)
