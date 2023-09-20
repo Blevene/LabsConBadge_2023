@@ -63,7 +63,7 @@ class trade:
                         chksum, self.rxclue, self.rxname = rxval.split(',')
                         print(f"RX: {chksum}, {self.rxclue}, {self.rxname}")
 
-                        if binascii.crc32(bytearray(self.rxclue + "," + self.rxname)) != int(chksum, 16):
+                        if binascii.crc32(bytearray(str(self.rxclue) + "," + str(self.rxname))) != int(chksum, 16):
                             print("[!] Invalid Checksum")
                             self.state="error"
                             self.details.text="receive error :(\n^ try again\nv cancel"
@@ -81,7 +81,7 @@ class trade:
                     self.details.text="timeout :(\n^ try again\nv cancel"
                 else:
                     self.details.text="receiving "+str((self.timeout - ticks_ms()) // 1000)
-                    print("nothing received yet",self.timeout,ticks_ms())
+                    #print("nothing received yet",self.timeout,ticks_ms())
             # if state is respond, tx 1 time
             elif self.state == "responding":
                 print("responding")
