@@ -46,8 +46,9 @@ class trade:
             if self.state == "transmitting":
                 print("transmitting")
                 self.details.text="transmitting..."
-                cksum = hex(binascii.crc32(bytearray(self.game.myclue+","+self.game.myname)))[2:]
-                self.ir.writebytes(bytearray(cksum + "," + self.game.myclue + "," + self.game.myname))
+                cksum = hex(binascii.crc32(bytearray(str(self.game.myclue) + "," + str(self.game.myname) ) ) ) [2:]
+                print(f"TX: {cksum}, {self.game.myclue} , {self.game.myname}")
+                self.ir.writebytes(bytearray(cksum + "," + str(self.game.myclue) + "," + str(self.game.myname)))
                 self.state="receiving"
                 self.timeout=ticks_ms()+5000
                 self.ir.uart.reset_input_buffer()
@@ -56,13 +57,13 @@ class trade:
             elif self.state == "receiving":
                 if self.ir.ready(4):
                     rxval=self.ir.readbytes()
-                    print(rxval)
+                    print(f"RX: {rxval}")
                     #todo prepare to rx signature here too and pass on to check_clue
                     if rxval.find(',') != -1: 
                         chksum, self.rxclue, self.rxname = rxval.split(',')
-                        print(chksum, self.rxclue,self.rxname)
+                        print(f"RX: {chksum}, {self.rxclue}, {self.rxname}")
 
-                        if binascii.crc32(bytearray(self.rxclue+","+self.rxname)) != int(chksum, 16):
+                        if binascii.crc32(bytearray(self.rxclue + "," + self.rxname)) != int(chksum, 16):
                             print("[!] Invalid Checksum")
                             self.state="error"
                             self.details.text="receive error :(\n^ try again\nv cancel"
@@ -85,8 +86,8 @@ class trade:
             elif self.state == "responding":
                 print("responding")
                 self.details.text="responding"
-                cksum = hex(binascii.crc32(bytearray(self.game.myclue+","+self.game.myname)))[2:]
-                self.ir.writebytes(bytearray(cksum + "," + self.game.myclue + "," + self.game.myname))
+                cksum = hex(binascii.crc32(bytearray(str(self.game.myclue) + "," + str(self.game.myname))))[2:]
+                self.ir.writebytes(bytearray(cksum + "," + str(self.game.myclue) + "," + str(self.game.myname)))
 
                 self.state="success"
                 print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
