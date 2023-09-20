@@ -8,51 +8,47 @@ WHITE=0xFFFFFF
 
 
 class alibis:
-    def __init__(self, group, dpad):
+    def __init__(self, group, dpad, game):
         self.group=group
         self.dpad=dpad
+        self.game=game
 
-        self.header=label.Label(terminalio.FONT,text="alibis", color=BLACK, x=8, y=8)
+        self.header=label.Label(terminalio.FONT,text="Alibis", color=BLACK, x=8, y=8)
         self.group.append(self.header)
-
         self.contents=label.Label(terminalio.FONT, scale=1, color=WHITE, x=8, y=24)
+        self.contents.hidden=True
         self.group.append(self.contents)
 
         self.details=displayio.Group(x=8,y=4)
         self.details.hidden=True
-        self.group.append(self.details)
-
         self.details.append(box(112,56,WHITE,0,0))
         self.details.append(box(110,54,BLACK,1,1))
-
         self.det=label.Label(terminalio.FONT,text="details", color=WHITE, x=4, y=8)
         self.details.append(self.det)
-
-        try:
-            with open("data/alibis.txt", 'r') as file:
-                self.alibilist = [line.strip() for line in file]
-        except OSError:
-            print("Error reading alibis.txt")
-            self.alibilist=["@securelyfitz","@blevene","@oscontext","@4","@5","@6"]
+        self.group.append(self.details)
 
         self.x=0
-        self.y=0
-
-    def add_alibi(self,alibiname):
-        self.alibilist.append(alibiname)
 
     def update(self):
+        newtext="" if self.x == 0 else self.game.alibis[self.x-1]
+        newtext+="\n> "+self.game.alibis[self.x]+"\n"
+        newtext+= "" if self.x == len(self.game.alibis)-1 else self.game.alibis[self.x+1]
+        self.contents.text=newtext
+        self.contents.hidden=False
+        self.det.text=self.game.alibis[self.x]
+        #todo add more detail to detail screen
         if self.dpad.u.fell:
-            if self.x==0: return "trade"
-            self.x -=1
+            self.x =(self.x-1)%len(self.game.alibis)
         if self.dpad.d.fell:
-            if self.x==0: return "sleep"
-            self.x +=1
+            self.x =(self.x+1)%len(self.game.alibis)
         if self.dpad.l.fell:
-            if self.y==0: return "settings"
-            self.y -=1
+            self.contents.hidden=True
+            self.details.hidden=True
+            return "settings"
         if self.dpad.r.fell:
-            if self.y==0: return "home"
-            self.y+=1
-        if self.dpad.x.fell: self.details.hidden=not self.details.hidden
+            self.contents.hidden=True
+            self.details.hidden=True
+            return "home"
+        if self.dpad.x.fell:
+            self.details.hidden=not self.details.hidden
         return "alibis"

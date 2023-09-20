@@ -1,4 +1,5 @@
 import time
+import gc
 import board
 import busio
 import pulseio
@@ -28,24 +29,12 @@ display=sh1106ui()
 dpad=FiveWayPad()
 
 game=gamedata(1)
-
-#if not (load name and current game from file)
-    #"Welcome to the Attribution Game!"
-    #"Meet people and trade clues to attribute the attack"
-    #"You don't have a handle yet"
-    #"Your handle will be shared with people you meet"
-    #" ^v to choose characters > for next"
-    #"welcome to the game @user"
-    #"press ^ and point your badge at someone else to trade"
-    #"the combo with no alibi is the solution."
-    #"have fun!"
-#load game data from file
-#load contacts from file
-
+#musttodo advance game numbers
+#musttodo add nepoixels
 homepage=home(display.homegroup,dpad)
 cluespage=clues(display.cluesgroup,dpad,game)
-settingspage=settings(display.settingsgroup,dpad)
-alibispage=alibis(display.alibisgroup,dpad)
+settingspage=settings(display.settingsgroup,dpad,game)
+alibispage=alibis(display.alibisgroup,dpad,game)
 tradepage=trade(display.tradegroup,dpad,game)
 sleeppage=sleep(display,dpad)
 
@@ -53,15 +42,14 @@ page="sleep"
 lastpage="home"
 SLEEPTIMEOUT=90
 while True:
+    gc.collect()
     #scan inputs
-    # print("update loop:",page)
-    #time.sleep(1)
     dpad.update()
-    display.show(page)
-    #go to sleep if timeout
-    if dpad.duration() > SLEEPTIMEOUT and page != "trade": page=sleeppage.update()
+    if page!=0: display.show(page)
+    #if dpad.duration() > SLEEPTIMEOUT and page != "trade": 
+    #    page=sleeppage.update()
     #if a button is pressed, handle it
-    elif not dpad.pressed():
+    if not dpad.pressed():
         time.sleep(0.001)
     elif page == "home":
         lastpage=page

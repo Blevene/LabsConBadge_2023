@@ -41,59 +41,73 @@ class clues:
         self.details.append(self.detaillabel)
         self.group.append(self.details)
 
-        #for i to len(t,a,v)= blank card
-        self.cluecounts=[len(self.game.threats),len(self.game.attacks),len(self.game.victims)]
+        self.setcards()
+        self.clue_grid[self.x,self.y]+=1
+
+
+    def setcards(self):
         for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
-        #for j in range(len(self.cluecounts)):
-            for i in range(self.cluecounts[j]):
+            for i in range(self.game.cluecounts[j]):
                 self.clue_grid[i,j]=7
-                print(cluetype[i][3])
                 if cluetype[i][3] != "": self.clue_grid[i,j]=j*2+1
         self.x=0
         self.y=0
-        self.clue_grid[self.x,self.y]+=1
+
 
     def update(self):
+        #show grid
         self.clue_group.hidden=False
+        #un-highlight current clue
         self.clue_grid[self.x,self.y]-=1
+        #if new clue, go to it
+        if self.game.newclue != None:
+            if self.game.newclue == -1:
+               self.setcards()
+               self.game.newclue=None
+            else:
+                self.x,self.y=self.game.newclue
+                self.details.hidden=False
+                self.game.newclue=None
         if self.dpad.u.fell:
             if self.y==0: 
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "trade"
             self.y -=1
-            self.x=min(self.x,self.cluecounts[self.y]-1)
+            self.x=min(self.x,self.game.cluecounts[self.y]-1)
         if self.dpad.d.fell:
             if self.y==2: 
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "sleep"
             self.y +=1
-            self.x=min(self.x,self.cluecounts[self.y]-1)
+            self.x=min(self.x,self.game.cluecounts[self.y]-1)
         if self.dpad.l.fell:
             if self.x==0:
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "home"
             self.x -=1
         if self.dpad.r.fell:
-            #todo change this to max # clues in the row
-            if self.x==self.cluecounts[self.y]-1:
+            if self.x==self.game.cluecounts[self.y]-1:
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "settings"
             self.x+=1
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
         self.clue_grid[self.x,self.y]+=1
-        if self.y==0:
-            if self.game.threats[self.x][3] == "":
-                self.detaillabel.text="It could have been\n"+self.game.threats[self.x][1]
-            else:
-                self.detaillabel.text=self.game.threats[self.x][4]+" said\n"+self.game.threats[self.x][1]+"\ndidn't do it"
-        elif self.y==1:
-            if self.game.attacks[self.x][3] == "":
-                self.detaillabel.text="It could have been\n"+self.game.attacks[self.x][1]
-            else:
-                self.detaillabel.text=self.game.attacks[self.x][4]+"\n said they didn't use\n"+self.game.attacks[self.x][1]
-        elif self.y==2:
-            if self.game.victims[self.x][3] == "":
-                self.detaillabel.text="It could have been\n"+self.game.victims[self.x][1]
-            else:
-                self.detaillabel.text=self.game.victims[self.x][4]+" said\n"+self.game.victims[self.x][1]+"\nwasn't the victim"
+        if self.y==0: clue=self.game.threats[self.x] 
+        elif self.y==1: clue=self.game.attacks[self.x]
+        else: clue=self.game.victims[self.x]
+        #print(clue)
+        if clue[3]=="":
+            self.detaillabel.text="Could've been\n"+clue[1]
+        elif clue[4]==self.game.myname:
+            self.detaillabel.text="I know it wasn't\n"+clue[1]
+        else:
+            self.detaillabel.text=clue[4]+"\nknows it wasn't\n"+clue[1]
         return "clues"
