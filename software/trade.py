@@ -46,7 +46,8 @@ class trade:
             if self.state == "transmitting":
                 print("transmitting")
                 self.details.text="transmitting..."
-                cksum = hex(binascii.crc32(bytearray(self.game.myclue+","+self.game.myname)))[2:]
+                print(f"{self.game.myclue} , {self.game.myname}")
+                cksum = hex(binascii.crc32(bytearray(str(self.game.myclue)+","+str(self.game.myname))))[2:]
                 self.ir.writebytes(bytearray(cksum + "," + self.game.myclue + "," + self.game.myname))
                 self.state="receiving"
                 self.timeout=ticks_ms()+5000
@@ -84,7 +85,7 @@ class trade:
             elif self.state == "responding":
                 print("responding")
                 self.details.text="responding"
-                cksum = hex(binascii.crc32(bytearray(self.game.myclue+","+self.game.myname)))[2:]
+                cksum = hex(binascii.crc32(bytearray(str(self.game.myclue) + "," + str(self.game.myname))))[2:]
                 self.ir.writebytes(bytearray(cksum + "," + self.game.myclue + "," + self.game.myname))
 
                 self.state="success"
