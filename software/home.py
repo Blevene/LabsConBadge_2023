@@ -43,9 +43,9 @@ class home:
             self.showandwait(" ^v to choose chars\n > for next\n > > when done    v")
             #musttodo add name entry
             self.showandwait("welcome\n to the game\n"+name+"!")
-            self.showandwait("press '^' & point @\n another to trade \n contacit & clues v")
+            self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
             self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
-            self.showandwait("Have fun!\n\n                  v")
+            self.showandwait("\n     Have fun!\n                  v")
 
     def showandwait(self,mystring):
         self.contents.text=mystring
