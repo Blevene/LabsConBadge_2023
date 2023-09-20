@@ -14,9 +14,11 @@ class home:
             "< - > change view\n^ - v to trade\nPress for more",
             "Thank you sponsors:\n   LutaSecurity, \n     Stairwell\n",
             "Thank you sponsors:\n Binarly, Aesir,\nGreyNoise, Canary\n",
-            "Thank you sponsors:\nThe Vertex Project,\nVector 35, BugCrowd\n",
+            "Thank you sponsors:\nThe Vertex Project,\n  Vector 35\n",
             "Thank you sponsors:\n  Cisco Talos,\n   BugCrowd\n",
-            "Thank you sponsors:\n  The Alperovitch\n    Institute\n",            
+            "Thank you sponsors:\n  The Alperovitch\n    Institute\n",    
+            "Thank you sponsors:\nHiddenLayer, Nuand,\n Framework\n",
+
             "how to play",
             "",
             ]
