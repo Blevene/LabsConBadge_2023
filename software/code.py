@@ -46,7 +46,7 @@ game=gamedata(1)
 homepage=home(display.homegroup,dpad)
 cluespage=clues(display.cluesgroup,dpad,game)
 settingspage=settings(display.settingsgroup,dpad)
-alibispage=alibis(display.alibisgroup,dpad)
+alibispage=alibis(display.alibisgroup,dpad,game)
 tradepage=trade(display.tradegroup,dpad,game)
 sleeppage=sleep(display,dpad)
 
