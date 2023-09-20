@@ -8,16 +8,49 @@ WHITE=0xFFFFFF
 
 class home:
     currentstring=0
-    #musttodo: fix strings, add sponsors
     #todo: sponsor images
 
     strings=[
             "< - > change view\n^ - v to trade\nPress for more",
-            "Page 2",
-            "Thank you sponsors",
+            "Thank you sponsors:\n   LutaSecurity, \n     Stairwell\n",
+            "Thank you sponsors:\n Binarly, Aesir,\nGreyNoise, Canary\n",
+            "Thank you sponsors:\nThe Vertex Project,\nVector 35, BugCrowd\n",
+            "Thank you sponsors:\n  Cisco Talos,\n   BugCrowd\n",
+            "Thank you sponsors:\n  The Alperovitch\n    Institute\n",            
             "how to play",
             "",
             ]
+
+
+# Thank you sponsors:\n
+#     LutaSecurity\n
+#     Stairwell\n
+
+# Thank you sponsors:\n
+#     Binarly\n
+#     Aesir\n
+
+# Thank you sponsors:\n
+#     Vertex\n
+#     GreyNoise\n
+
+# Thank you sponsors:\n
+#    Cisco Talos\n
+#     BugCrowd\n
+
+# Thank you sponsors:\n
+#     Vector 35\n
+#       Canary\n
+
+# Thank you sponsors:\n
+#     Alperovitch\n
+#     Institute\n
+
+
+
+
+
+
 
     def __init__(self, group, dpad):
         self.group=group
