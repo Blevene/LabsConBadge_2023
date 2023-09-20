@@ -8,26 +8,42 @@ WHITE=0xFFFFFF
 
 
 class settings:
+    settings=["LED pattern","Change Name","Clear Clues","Clear Contacts"]
+
     def __init__(self, group, dpad):
         self.group=group
         self.dpad=dpad
-        self.header=label.Label(terminalio.FONT,text="settings", color=BLACK, x=8, y=8)
+
+        self.header=label.Label(terminalio.FONT,text="Settings", color=BLACK, x=8, y=8)
         self.group.append(self.header)
+        self.contents=label.Label(terminalio.FONT, scale=1, color=WHITE, x=8, y=24)
+        self.contents.hidden=True
+        self.group.append(self.contents)
 
         self.details=displayio.Group(x=8,y=4)
         self.details.hidden=True
-        self.group.append(self.details)
-
         self.details.append(box(112,56,WHITE,0,0))
         self.details.append(box(110,54,BLACK,1,1))
-
         self.det=label.Label(terminalio.FONT,text="details", color=WHITE, x=4, y=8)
         self.details.append(self.det)
+        self.group.append(self.details)
+
+        self.x=0
 
     def update(self):
-        if self.dpad.u.fell: return "trade"
-        if self.dpad.d.fell: return "sleep"
-        if self.dpad.l.fell: return "clues"
-        if self.dpad.r.fell: return "alibis"
-        if self.dpad.x.fell: self.details.hidden=not self.details.hidden
+        self.contents.text = "" if self.x == 0 else self.setting[self.x-1]
+        self.contents.text +="> "+self.settings[self.x]
+        self.contents.text = "" if self.x == len(self.settings) else self.settings[self.x+1]
+        self.contents.hidden=False
+        #todo: setup detail screen
+        if self.dpad.u.fell:
+            self.x -=(self.x+1)%len(self.settings)
+        if self.dpad.d.fell:
+            self.x +=(self.x+1)%len(self.settings)
+        if self.dpad.l.fell:
+            return "clues"
+        if self.dpad.r.fell:
+            return "alibis"
+        if self.dpad.x.fell:
+            self.details.hidden=not self.details.hidden
         return "settings"
