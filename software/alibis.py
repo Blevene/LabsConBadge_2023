@@ -28,18 +28,8 @@ class alibis:
         self.det=label.Label(terminalio.FONT,text="details", color=WHITE, x=4, y=8)
         self.details.append(self.det)
 
-        try:
-            with open("data/alibis.txt", 'r') as file:
-                self.alibilist = [line.strip() for line in file]
-        except OSError:
-            print("Error reading alibis.txt")
-            self.alibilist=["@securelyfitz","@blevene","@oscontext","@4","@5","@6"]
-
         self.x=0
         self.y=0
-
-    def add_alibi(self,alibiname):
-        self.alibilist.append(alibiname)
 
     def update(self):
         if self.dpad.u.fell:
