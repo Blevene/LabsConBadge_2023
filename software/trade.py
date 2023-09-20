@@ -61,7 +61,7 @@ class trade:
                         chksum, self.rxclue, self.rxname = rxval.split(',')
                         print(chksum, self.rxclue,self.rxname)
 
-                        if binascii.crc32(self.game.myclue+","+self.game.myname) != int(chksum, 16):
+                        if binascii.crc32(bytearray(self.rxclue+","+self.rxname)) != int(chksum, 16):
                             print("[!] Invalid Checksum")
                             self.state="error"
                             self.details.text="receive error :(\n^ try again\nv cancel"
