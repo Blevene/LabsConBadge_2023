@@ -1,4 +1,5 @@
 import time
+import gc
 import board
 import busio
 import pulseio
@@ -53,15 +54,14 @@ page="sleep"
 lastpage="home"
 SLEEPTIMEOUT=90
 while True:
+    gc.collect()
     #scan inputs
-    # print("update loop:",page)
-    #time.sleep(1)
     dpad.update()
-    display.show(page)
-    #go to sleep if timeout
-    if dpad.duration() > SLEEPTIMEOUT and page != "trade": page=sleeppage.update()
+    if page!=0: display.show(page)
+    #if dpad.duration() > SLEEPTIMEOUT and page != "trade": 
+    #    page=sleeppage.update()
     #if a button is pressed, handle it
-    elif not dpad.pressed():
+    if not dpad.pressed():
         time.sleep(0.001)
     elif page == "home":
         lastpage=page
