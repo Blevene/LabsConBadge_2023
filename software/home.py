@@ -7,8 +7,6 @@ import random
 BLACK=0x000000
 WHITE=0xFFFFFF
 
-nList = ["Phishing",  "Malware",  "Ransomware",  "Spoofing",  "Encryption",  "Adware",  "0day",  "hashes",  "Bot",  "Botnets",  "DDoS",  "Firewall",  "Payload",  "White hat",  "Rootkit",  "Worm",  "Cloaking",  "Eavesdropping",  "SQL",  "XSS",  "Backdoor",  "Doxing",  "Keystroke",  "Botnet",  "Blacklisting",  "Attack",  "Authentication",  "Backup",  "Blackhat",  "Code injection",  "Exploit",  "Patch",  "Spam",  "URL injection",  "CSRF",  "APT",  "Jags",  "Ajax",  "Security Team",  "Alibaba",  "Admin338",  "1.php",  "Arid", "Viper",  "FANCY",  "PANDA",  "SPIDER",  "BEAR",  "CHOLLIMA",  "KITTEN",  "EAGLE",  "QRCode",  "Berserk",  "VOODOO",  "SANDW0RM",  "Bluenoroff",  "Group",  "Team",  "RedBull",  "Twitter",  "Agency"]
-
 class home:
     currentstring=0
     #todo: sponsor images
@@ -46,10 +44,11 @@ class home:
             self.showandwait("You don't have\n a handle yet!\n                  v")
             self.showandwait("Your handle \nwill be shared with\n people you meet  v")
             name=self.showandprompty(" ^v to choose chars\n Press to save\n{}")
-            self.showandwait("welcome\n to the game\n"+name+"!")
+            self.showandwait("welcome\n to the game   v\n"+name+"!")
             self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
             self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
             self.showandwait("\n     Have fun!\n                  v")
+            self.contents.text=strings[0]
 
     def showandwait(self,mystring):
         self.contents.text=mystring
