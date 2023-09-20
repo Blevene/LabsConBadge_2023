@@ -95,7 +95,7 @@ class home:
                 print("Saving name")
                 try:
                     with open("data/myname.txt",'w') as file:
-                        file.write(playername)
+                        file.write("".join(playername))
                 except OSError as e:
                     print(e)
                 return "".join(playername)

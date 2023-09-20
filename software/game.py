@@ -71,7 +71,7 @@ class gamedata:
     def write_name(self):
         try:
             fhandle = open("data/myname.txt", 'w')
-            fhandle.write(self.name)
+            fhandle.write(self.myname)
             fhandle.close()
         except OSError:
             print("Error writing name file")
