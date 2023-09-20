@@ -49,6 +49,7 @@ class ledcontrol:
     currentpattern=0
 
     def __init__(self):
+        self.ledpatterns.append(Solid(self.pixels,color.BLACK))
         self.ledpatterns.append(RainbowComet(self.pixels,0.1,ring=True))
         self.ledpatterns.append(Rainbow(self.pixels,0.1))
         for c in [color.RED,color.ORANGE,color.YELLOW,color.GREEN,color.BLUE,color.PURPLE,color.WHITE]:

@@ -8,7 +8,7 @@ WHITE=0xFFFFFF
 
 
 class settings:
-    settings=["LED Color","Clear Name","Clear Clues","Clear Contacts"]
+    settings=["LED Color","Clear Name","Clear Clues","Clear Contacts","LEDs Off"]
 
     def __init__(self, group, dpad, game, leds):
         self.group=group
@@ -53,7 +53,6 @@ class settings:
                 if self.x==0:
                     #advance to next led mode
                     self.settings[self.x]="LEDs: "+ self.leds.nextpattern()
-                    pass
                 elif self.x==1:
                     #change name by setting to "" and forcing power cycle
                     self.det.text="Wipe your name?\n'<' cancel\n'>' wipe"
@@ -89,4 +88,7 @@ class settings:
                         if self.dpad.r.fell:
                             self.game.wipe_alibis()
                             self.det.text="Alibis Wiped!\n'<' to return"
+                if self.x==4:
+                    #leds off
+                    self.leds.currentpattern=0
         return "settings"

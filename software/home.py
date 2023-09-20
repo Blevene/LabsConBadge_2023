@@ -44,7 +44,7 @@ class home:
             self.showandwait("Meet people & trade\n clues to attribute \n the attack       v")
             self.showandwait("You don't have\n a handle yet!\n                  v")
             self.showandwait("Your handle \nwill be shared with\n people you meet  v")
-            self.showandprompty(" ^v to choose chars\n Press to save\n{}") #            #musttodo add name entry
+            name=self.showandprompty(" ^v to choose chars\n Press to save\n{}")
             self.showandwait("welcome\n to the game\n"+name+"!")
             self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
             self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
@@ -63,48 +63,40 @@ class home:
         crange = "abcdefghijklmnopqrstuvwxyz.@!"
         cindex = 0
         nindex = 0
-        self.contents.text=mystring
+        playername[nindex] = crange[cindex]
+        self.contents.text=mystring.format("".join(playername))
         while True:
-
-            playername[nindex] = crange[cindex]
-            self.contents.text=mystring.format("".join(playername))
-
-            print(self.dpad.r.fell)
-            print(self.dpad.l.fell)
+            self.dpad.update()
+            #print(self.dpad.r.fell)
+            #print(self.dpad.l.fell)
 
             if self.dpad.u.fell: 
-                if cindex >= 0:  
-                    cindex = 0 
-                else:
-                    cindex = 0
-
-            if self.dpad.d.fell:
-                if cindex == len(crange)-1:
-                    cindex = 0
-                else:
-                    cindex += 1
-
-            if self.dpad.l.fell:
+                cindex=(cindex-1)%len(crange)
+                playername[nindex] = crange[cindex]
+                self.contents.text=mystring.format("".join(playername))
+            elif self.dpad.d.fell:
+                cindex=(cindex+1)%len(crange)
+                playername[nindex] = crange[cindex]
+                self.contents.text=mystring.format("".join(playername))
+            elif self.dpad.l.fell:
                 if nindex >= 0: 
                     nindex -= 1
                 else:
                     nindex = 0
-            if self.dpad.r.fell:
+            elif self.dpad.r.fell:
                 if nindex == len(playername)-1:
                     nindex = 0
                 else:
                     nindex += 1
-
-            if self.dpad.x.fell: 
+            elif self.dpad.x.fell: 
                 print("Saving name")
                 try:
                     with open("data/myname.txt",'w') as file:
                         file.write(playername)
                 except OSError as e:
                     print(e)
-                return
+                return "".join(playername)
 
-            self.dpad.update()
 
     def update(self):
         self.contents.hidden=False
