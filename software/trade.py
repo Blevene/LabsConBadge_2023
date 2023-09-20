@@ -51,10 +51,11 @@ class trade:
                 self.ir.writebytes(bytearray(cksum + "," + str(self.game.myclue) + "," + str(self.game.myname)))
                 self.state="receiving"
                 self.timeout=ticks_ms()+5000
+                self.ir.uart.reset_input_buffer()
 
             # if state is rx, recieve until valid clue recieved or timeout
             elif self.state == "receiving":
-                if self.ir.ready(1):
+                if self.ir.ready(4):
                     rxval=self.ir.readbytes()
                     print(f"RX: {rxval}")
                     #todo prepare to rx signature here too and pass on to check_clue

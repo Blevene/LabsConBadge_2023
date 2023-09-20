@@ -22,8 +22,6 @@ class gamedata:
         self.read_alibis()
         self.gamefile="data/game"+str(gamenum)+".csv"
         self.read_clues()
-        self.cluecounts=[len(self.threats),len(self.attacks),len(self.victims)]
-        self.check_clue(self.myclue,self.myname)
 
     def check_clue(self,newclue,alibi):
         # todo: check signature
@@ -82,15 +80,19 @@ class gamedata:
         return True
 
     def read_clues(self):
-        #should only be called by constructor at powerup
         try:
             with open(self.gamefile, 'r') as file:
                 csv=circuitpython_csv.reader(file)
+                threats=[]
+                attacks=[]
+                victims=[]
                 for row in csv:
                     if row[0] == "T":self.threats.append(row)
                     elif row[0] == "A":self.attacks.append(row)
                     elif row[0] == "V":self.victims.append(row)
                     elif row[0] == "*":self.myclue=row[1]
+            self.cluecounts=[len(self.threats),len(self.attacks),len(self.victims)]
+            self.check_clue(self.myclue,self.myname)
         except OSError:
             print("Error reading from file:", self.gamefile)
     
