@@ -2,16 +2,18 @@ import circuitpython_csv
 
 class gamedata:
     myclue=None
+    myname=None
     threats=[]
     attacks=[]
     victims=[]
     def __init__(self,gamenum):
+        self.read_name()
         self.read_clues_collection("data/game"+str(gamenum)+".csv")
         self.check_clue(self.myclue,"I")
 
     def check_clue(self,newclue,alibi):
         # todo: decrypt
-        print(newclue,alibi)
+        #print(newclue,alibi)
         for clue in (self.threats+self.attacks+self.victims):
             if clue[1] == newclue: 
                 clue[3] = newclue
@@ -26,6 +28,16 @@ class gamedata:
                 # if clue is null append to suspects
             # if >1 suspect return false
         return True
+
+    def read_name(self):
+        #getname, if not, do oob?
+        try:
+            with open("data/myname",'r') as file:
+                self.myname=file.readline().rstrip()
+                print("hello",self.myname)
+        except OSError:
+            print("Error reading name from file")
+            self.myname="unknown"
 
     def read_clues_collection(self,filename):
         #should only be called by constructor at powerup
