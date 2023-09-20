@@ -21,8 +21,6 @@ class home:
             "Thank you sponsors:\n  Cisco Talos,\n   BugCrowd\n",
             "Thank you sponsors:\n  The Alperovitch\n    Institute\n",    
             "Thank you sponsors:\nHiddenLayer, Nuand,\n Framework\n",
-            "how to play",
-            "",
             ]
 
     def __init__(self, group, dpad):
