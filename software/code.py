@@ -7,7 +7,7 @@ import digitalio
 import displayio
 import terminalio
 import adafruit_imageload
-import adafruit_displayio_sh1106
+#import adafruit_displayio_sh1106
 from fake_irda import FakeIRDA
 from sh1106_ui import sh1106ui, box
 from five_way_pad import FiveWayPad
