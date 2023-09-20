@@ -29,8 +29,11 @@ class gamedata:
         # todo: check signature
         # todo: remove duplicates in alibis
         #print(newclue,alibi)
-        self.alibis.append(alibi)
-
+        if alibi not in self.alibis:
+            self.alibis.append(alibi)
+        else:
+            print(f"Alibi {alibi} already known")
+            
 #        for clue in (self.threats+self.attacks+self.victims):
 #            if clue[1] == newclue: 
 #                clue[3] = newclue
