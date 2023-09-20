@@ -97,4 +97,5 @@ class settings:
                     self.game.gamefile="data/game"+str(self.game.gamenum)+".csv"
                     self.settings[self.x]="Game #"+str(self.game.gamenum)
                     self.game.read_clues()
+                    self.game.newclue=-1
         return "settings"
