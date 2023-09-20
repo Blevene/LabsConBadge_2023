@@ -18,41 +18,9 @@ class home:
             "Thank you sponsors:\n  Cisco Talos,\n   BugCrowd\n",
             "Thank you sponsors:\n  The Alperovitch\n    Institute\n",    
             "Thank you sponsors:\nHiddenLayer, Nuand,\n Framework\n",
-
             "how to play",
             "",
             ]
-
-
-# Thank you sponsors:\n
-#     LutaSecurity\n
-#     Stairwell\n
-
-# Thank you sponsors:\n
-#     Binarly\n
-#     Aesir\n
-
-# Thank you sponsors:\n
-#     Vertex\n
-#     GreyNoise\n
-
-# Thank you sponsors:\n
-#    Cisco Talos\n
-#     BugCrowd\n
-
-# Thank you sponsors:\n
-#     Vector 35\n
-#       Canary\n
-
-# Thank you sponsors:\n
-#     Alperovitch\n
-#     Institute\n
-
-
-
-
-
-
 
     def __init__(self, group, dpad):
         self.group=group
@@ -67,7 +35,8 @@ class home:
         try:
             with open("data/myname.txt",'r') as file:
                 name=file.readline().rstrip()
-        except OSError:
+        except OSError as e:
+            print(e)
             name=""
         
         if name=="":
@@ -75,8 +44,7 @@ class home:
             self.showandwait("Meet people & trade\n clues to attribute \n the attack       v")
             self.showandwait("You don't have\n a handle yet!\n                  v")
             self.showandwait("Your handle \nwill be shared with\n people you meet  v")
-            self.showandwait(" ^v to choose chars\n > for next\n > > when done    v")
-            #musttodo add name entry
+            self.showandprompty(" ^v to choose chars\n Press to save\n{}") #            #musttodo add name entry
             self.showandwait("welcome\n to the game\n"+name+"!")
             self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
             self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
@@ -88,6 +56,55 @@ class home:
         while not self.dpad.d.fell:
             self.dpad.update()
 
+    def showandprompty(self,mystring):
+        self.dpad.update()
+
+        playername = [" ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", " ", ]             # ## ZGllIGxhYXN0ZSBzdHVra2llIHZhbiAnbiBsZWdrYWFydCBpcyBiby1hYW4gZGllIFZyeWRhZ29nZ2VuZHN0YXAu
+        crange = "abcdefghijklmnopqrstuvwxyz.@!"
+        cindex = 0
+        nindex = 0
+        self.contents.text=mystring
+        while True:
+
+            playername[nindex] = crange[cindex]
+            self.contents.text=mystring.format("".join(playername))
+
+            print(self.dpad.r.fell)
+            print(self.dpad.l.fell)
+
+            if self.dpad.u.fell: 
+                if cindex >= 0:  
+                    cindex = 0 
+                else:
+                    cindex = 0
+
+            if self.dpad.d.fell:
+                if cindex == len(crange)-1:
+                    cindex = 0
+                else:
+                    cindex += 1
+
+            if self.dpad.l.fell:
+                if nindex >= 0: 
+                    nindex -= 1
+                else:
+                    nindex = 0
+            if self.dpad.r.fell:
+                if nindex == len(playername)-1:
+                    nindex = 0
+                else:
+                    nindex += 1
+
+            if self.dpad.x.fell: 
+                print("Saving name")
+                try:
+                    with open("data/myname.txt",'w') as file:
+                        file.write(playername)
+                except OSError as e:
+                    print(e)
+                return
+
+            self.dpad.update()
 
     def update(self):
         self.contents.hidden=False
