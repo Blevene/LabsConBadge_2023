@@ -42,10 +42,8 @@ class clues:
         self.group.append(self.details)
 
         #for i to len(t,a,v)= blank card
-        self.cluecounts=[len(self.game.threats),len(self.game.attacks),len(self.game.victims)]
         for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
-        #for j in range(len(self.cluecounts)):
-            for i in range(self.cluecounts[j]):
+            for i in range(self.game.cluecounts[j]):
                 self.clue_grid[i,j]=7
                 #print(cluetype[i][3])
                 if cluetype[i][3] != "": self.clue_grid[i,j]=j*2+1
@@ -54,28 +52,34 @@ class clues:
         self.clue_grid[self.x,self.y]+=1
 
     def update(self):
+        #show grid
         self.clue_group.hidden=False
+        #un-highlight current clue
         self.clue_grid[self.x,self.y]-=1
+        #if new clue, go to it
+        if self.game.newclue != None:
+            self.x,self.y=self.game.newclue
+            self.details.hidden=False
+            self.game.newclue=None
         if self.dpad.u.fell:
             if self.y==0: 
                 self.clue_group.hidden=True
                 return "trade"
             self.y -=1
-            self.x=min(self.x,self.cluecounts[self.y]-1)
+            self.x=min(self.x,self.game.cluecounts[self.y]-1)
         if self.dpad.d.fell:
             if self.y==2: 
                 self.clue_group.hidden=True
                 return "sleep"
             self.y +=1
-            self.x=min(self.x,self.cluecounts[self.y]-1)
+            self.x=min(self.x,self.game.cluecounts[self.y]-1)
         if self.dpad.l.fell:
             if self.x==0:
                 self.clue_group.hidden=True
                 return "home"
             self.x -=1
         if self.dpad.r.fell:
-            #todo change this to max # clues in the row
-            if self.x==self.cluecounts[self.y]-1:
+            if self.x==self.game.cluecounts[self.y]-1:
                 self.clue_group.hidden=True
                 return "settings"
             self.x+=1

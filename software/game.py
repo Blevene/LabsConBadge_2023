@@ -17,6 +17,7 @@ class gamedata:
         self.read_name()
         self.read_alibis()
         self.read_clues("data/game"+str(gamenum)+".csv")
+        self.cluecounts=[len(self.threats),len(self.attacks),len(self.victims)]
         self.check_clue(self.myclue,"I")
 
     def check_clue(self,newclue,alibi):
@@ -24,12 +25,20 @@ class gamedata:
         # todo: remove duplicates in alibis
         #print(newclue,alibi)
         alibis.append(alibi)
-        for clue in (self.threats+self.attacks+self.victims):
-            if clue[1] == newclue: 
-                clue[3] = newclue
-                clue[4] = alibi
-                self.newclue=newclue
-                return newclue
+
+#        for clue in (self.threats+self.attacks+self.victims):
+#            if clue[1] == newclue: 
+#                clue[3] = newclue
+#                clue[4] = alibi
+#                self.newclue=newclue
+#                return newclue
+        for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
+            for i in range(self.cluecounts[j]):
+                if cluetype[i][1]==newclue:
+                    cluetype[i][3]=newclue:
+                    cluetype[i][3]=alibi:
+                    newclue=[i,j]
+                    return newclue
         return False 
     
     def is_solved(self):
