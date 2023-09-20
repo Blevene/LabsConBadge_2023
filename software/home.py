@@ -2,9 +2,12 @@ from adafruit_display_text import label
 from sh1106_ui import box
 import terminalio
 import displayio
+import random
 
 BLACK=0x000000
 WHITE=0xFFFFFF
+
+nList = ["Phishing",  "Malware",  "Ransomware",  "Spoofing",  "Encryption",  "Adware",  "0day",  "hashes",  "Bot",  "Botnets",  "DDoS",  "Firewall",  "Payload",  "White hat",  "Rootkit",  "Worm",  "Cloaking",  "Eavesdropping",  "SQL",  "XSS",  "Backdoor",  "Doxing",  "Keystroke",  "Botnet",  "Blacklisting",  "Attack",  "Authentication",  "Backup",  "Blackhat",  "Code injection",  "Exploit",  "Patch",  "Spam",  "URL injection",  "CSRF",  "APT",  "Jags",  "Ajax",  "Security Team",  "Alibaba",  "Admin338",  "1.php",  "Arid", "Viper",  "FANCY",  "PANDA",  "SPIDER",  "BEAR",  "CHOLLIMA",  "KITTEN",  "EAGLE",  "QRCode",  "Berserk",  "VOODOO",  "SANDW0RM",  "Bluenoroff",  "Group",  "Team",  "RedBull",  "Twitter",  "Agency"]
 
 class home:
     currentstring=0
@@ -44,7 +47,22 @@ class home:
             self.showandwait("Meet people & trade\n clues to attribute \n the attack       v")
             self.showandwait("You don't have\n a handle yet!\n                  v")
             self.showandwait("Your handle \nwill be shared with\n people you meet  v")
-            self.showandprompty(" ^v to choose chars\n Press to save\n{}") #            #musttodo add name entry
+
+            # Random Handle Patch
+            handle = "{} {}".format(random.choice(nList), random.choice(nList))
+            self.showandwait("Your name is: \n{}".format(handle.replace(' ', '\n')))
+
+            print("Saving name")
+            try:
+                with open("data/myname.txt",'w') as file:
+                    file.write(handle)
+            except OSError as e:
+                print(e)
+
+            # </> Random handle patch
+
+            # Enable after fixing name prompt
+#            self.showandprompty(" ^v to choose chars\n Press to save\n{}") #            #musttodo add name entry
             self.showandwait("welcome\n to the game\n"+name+"!")
             self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
             self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
@@ -78,24 +96,24 @@ class home:
                 else:
                     cindex = 0
 
-            if self.dpad.d.fell:
+            elif self.dpad.d.fell:
                 if cindex == len(crange)-1:
                     cindex = 0
                 else:
                     cindex += 1
 
-            if self.dpad.l.fell:
+            elif self.dpad.l.fell:
                 if nindex >= 0: 
                     nindex -= 1
                 else:
                     nindex = 0
-            if self.dpad.r.fell:
+            elif self.dpad.r.fell:
                 if nindex == len(playername)-1:
                     nindex = 0
                 else:
                     nindex += 1
 
-            if self.dpad.x.fell: 
+            elif self.dpad.x.fell: 
                 print("Saving name")
                 try:
                     with open("data/myname.txt",'w') as file:
@@ -103,8 +121,8 @@ class home:
                 except OSError as e:
                     print(e)
                 return
-
-            self.dpad.update()
+            else:
+                self.dpad.update()
 
     def update(self):
         self.contents.hidden=False
