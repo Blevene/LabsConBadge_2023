@@ -12,9 +12,7 @@ WHITE=0xFFFFFF
 
 class trade:
     state="transmitting"
-    count=0
-    timeout=5
-    retries=0
+    timeout=0
 
     def __init__(self, group, dpad, game):
         self.group=group
@@ -39,17 +37,15 @@ class trade:
         self.group.hidden=False
 
         while True:
-            #print("starting trade",self.state,self.count,self.timeout)
+            #print("starting trade",self.state,self.timeout)
             self.ir.enablePHY()
             
             # process tx/rx
-            # if state is tx, transmit and increment count
+            # if state is tx, transmit
             if self.state == "transmitting":
-                self.count += 1
-                print("transmitting", self.count)
+                print("transmitting")
                 self.details.text="transmitting"
                 self.ir.writebytes(bytearray(self.game.myclue+","+self.game.myname))
-                self.count=5
                 self.state="receiving"
                 self.timeout=ticks_ms()+5000
 
@@ -58,14 +54,15 @@ class trade:
                 if self.ir.ready(1):
                     rxval=self.ir.readbytes()
                     print(rxval)
+                    #todo prepare to rx signature here too and pass on to check_clue
                     if rxval.find(',') != -1: 
                         self.rxclue,self.rxname=rxval.split(',')
                         print(self.rxclue,self.rxname)
                         if self.rxclue is not None and self.rxname is not None and self.game.check_clue(self.rxclue,self.rxname):
                             print("recieved")
-                            self.count=0
                             self.state="responding"
-                            #time.sleep(.5)
+                    else:
+                        self.state="error"
                 elif ticks_ms()> self.timeout:
                     print("timeout")
                     self.state="timeout"
@@ -75,30 +72,32 @@ class trade:
                     #time.sleep(.5)
             # if state is respond, tx 1 time
             elif self.state == "responding":
-                self.count += 1
-                print("transmitting", self.count)
+                print("transmitting")
                 self.details.text="responding"
                 self.ir.writebytes(bytearray(self.game.myclue+","+self.game.myname))
-                self.count=0
                 self.state="success"
             elif self.state =="success":
                 print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
-                self.details.text=self.rxname+" \nsaid it wasn't\n"+self.rxclue
+                self.details.text=i"< "self.rxname+" \nsaid it wasn't\n >"+self.rxclue
+            elif self.state =="error":
+                print("recieve error")
+                self.details.text="receive error :(\n^ try agains\nv cancel"
             else:
-                print("timeout", self.count)
-                self.details.text="responding"
+                print("timeout")
+                self.details.text="timeout :(\n^ try agains\nv cancel"
                 
             # process keypresses
             self.dpad.update()
             # if down is pressed, return to where we came from
-            #todo: l for alibi details, r for clue details
-            if self.dpad.d.fell:
+            retval=None
+            if self.dpad.d.fell: retval=0
+            if state==success and self.dpad.l.fell: retval="alibis"
+            if state==success and self.dpad.r.fell: retval="clues"
+            if retval is not None:
                 self.ir.disablePHY()
                 self.state="transmitting"
-                self.count=0
                 self.group.hidden=True
-                return 0
+                return retval
             # if u is pressed, restart the trade process
-            elif self.dpad.u.fell: 
+            if self.dpad.u.fell: 
                 self.state="transmitting"
-                self.count=0
