@@ -80,9 +80,9 @@ class gamedata:
         try:
             with open(self.gamefile, 'r') as file:
                 csv=circuitpython_csv.reader(file)
-                threats=[]
-                attacks=[]
-                victims=[]
+                self.threats=[]
+                self.attacks=[]
+                self.victims=[]
                 for row in csv:
                     if row[0] == "T":self.threats.append(row)
                     elif row[0] == "A":self.attacks.append(row)
