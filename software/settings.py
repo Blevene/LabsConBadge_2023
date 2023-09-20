@@ -8,7 +8,7 @@ WHITE=0xFFFFFF
 
 
 class settings:
-    settings=["LED Color","Clear Name","Clear Clues","Clear Contacts","LEDs Off"]
+    settings=["LED Color","Clear Name","Clear Clues","Clear Contacts","LEDs Off","Advance Game"]
 
     def __init__(self, group, dpad, game, leds):
         self.group=group
@@ -91,4 +91,10 @@ class settings:
                 if self.x==4:
                     #leds off
                     self.leds.currentpattern=0
+                if self.x==5:
+                    #advance game
+                    self.game.gamenum=(self.game.gamenum+1)%8
+                    self.game.gamefile="data/game"+str(self.game.gamenum)+".csv"
+                    self.settings[self.x]="Game #"+str(self.game.gamenum)
+                    self.game.read_clues()
         return "settings"
