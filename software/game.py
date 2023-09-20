@@ -15,6 +15,7 @@ class gamedata:
     threats=[]
     attacks=[]
     victims=[]
+    cluecounts=[0,0,0]
     alibis=[]
     def __init__(self,gamenum=0):
         self.gamenum=gamenum
