@@ -71,23 +71,31 @@ class clues:
         if self.dpad.u.fell:
             if self.y==0: 
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "trade"
             self.y -=1
             self.x=min(self.x,self.game.cluecounts[self.y]-1)
         if self.dpad.d.fell:
             if self.y==2: 
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "sleep"
             self.y +=1
             self.x=min(self.x,self.game.cluecounts[self.y]-1)
         if self.dpad.l.fell:
             if self.x==0:
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "home"
             self.x -=1
         if self.dpad.r.fell:
             if self.x==self.game.cluecounts[self.y]-1:
                 self.clue_group.hidden=True
+                self.details.hidden=True
+                self.clue_grid[self.x,self.y]+=1
                 return "settings"
             self.x+=1
         if self.dpad.x.fell: self.details.hidden=not self.details.hidden
@@ -95,6 +103,7 @@ class clues:
         if self.y==0: clue=self.game.threats[self.x] 
         elif self.y==1: clue=self.game.attacks[self.x]
         else: clue=self.game.victims[self.x]
+        #print(clue)
         if clue[3]=="":
             self.detaillabel.text="Could've been\n"+clue[1]
         elif clue[4]==self.game.myname:
