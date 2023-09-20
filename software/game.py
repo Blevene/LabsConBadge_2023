@@ -41,6 +41,7 @@ class gamedata:
             for i in range(self.cluecounts[j]):
                 if cluetype[i][1]==newclue:
                     cluetype[i][3]=newclue
+                    cluetype[i][4]=alibi
                     self.newclue=[i,j]
                     return newclue
         return False 

@@ -32,7 +32,7 @@ class sh1106ui:
 
         # Make maingroup to hold stuff
         self.maingroup = displayio.Group()
-        self.maingroup.hidden=True
+        self.maingroup.hidden=False
         self.display.show(self.maingroup)
 
         # make a background in the back of header
