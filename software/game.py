@@ -59,6 +59,16 @@ class gamedata:
             print("Error reading name from file")
             self.myname="unknown"
 
+    def write_name(self)
+        try:
+            fhandle = open("data/myname.txt", 'w')
+            fhandle.write(self.name))
+            fhandle.close()
+        except OSError:
+            print("Error writing name file")
+            return False
+        return True
+
     def read_clues(self,filename):
         #should only be called by constructor at powerup
         try:
@@ -71,24 +81,14 @@ class gamedata:
                     elif row[0] == "*":self.myclue=row[1]
         except OSError:
             print("Error reading from file:", filename)
-
-    def read_alibis(self):)
-        try:
-            with open("data/alibis.txt", 'r') as file:
-                self.alibis = [line.strip() for line in file]
-        except OSError:
-            print("Error reading alibis.txt")
-            self.alibis=["@securelyfitz","@blevene","@oscontext"]
-
-    def write_alibis(self)
-        try:
-            fhandle = open("data/alibis.txt", 'w')
-            fhandle.write("\n".join(alibis))
-            fhandle.close()
-        except OSError:
-            print("Error writing ailbis file")
-            return False
-        return True
+    
+    def wipe_clues(self):
+        for cluetype in [self.threats,self.attacks,self.victims]
+            for clue in cluetype
+                if clue!=self.myclue
+                    clue[3]=""
+                    clue[4]=""
+        write_clues():
 
     def write_clues(self):
         #should be called every time we add a clue?
@@ -101,14 +101,25 @@ class gamedata:
             return False
         return True
 
-    def write_name(self)
+    def read_alibis(self):
         try:
-            fhandle = open("data/myname.txt", 'w')
-            fhandle.write(self.name))
+            with open("data/alibis.txt", 'r') as file:
+                self.alibis = [line.strip() for line in file]
+        except OSError:
+            print("Error reading alibis.txt")
+            self.alibis=[myname,"@securelyfitz","@blevene","@oscontext"]
+
+    def wipe_alibis(self):
+        self.aibis=[myname]
+        self.write_alibis()
+
+    def write_alibis(self)
+        try:
+            fhandle = open("data/alibis.txt", 'w')
+            fhandle.write("\n".join(alibis))
             fhandle.close()
         except OSError:
-            print("Error writing name file")
+            print("Error writing ailbis file")
             return False
         return True
 
-        
