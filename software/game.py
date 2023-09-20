@@ -64,6 +64,10 @@ class gamedata:
             print("Error reading name from data/myname.txt")
             self.myname="unknown"
 
+    def wipe_name() 
+        self.myname=""
+        self.write_name()
+
     def write_name(self):
         try:
             fhandle = open("data/myname.txt", 'w')

@@ -68,7 +68,6 @@ leds=ledcontrol()
 
 game=gamedata(1)
 #musttodo advance game numbers
-#musttodo add nepoixels
 homepage=home(display.homegroup,dpad)
 cluespage=clues(display.cluesgroup,dpad,game)
 settingspage=settings(display.settingsgroup,dpad,game,leds)
