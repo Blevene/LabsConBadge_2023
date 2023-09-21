@@ -40,7 +40,7 @@ class trade:
         while True:
             #print("starting trade",self.state,self.timeout)
             self.ir.enablePHY()
-            
+
             # process tx/rx
             # if state is tx, transmit
             if self.state == "transmitting":
@@ -59,13 +59,13 @@ class trade:
 
                 self.timeout=ticks_ms()+30000
 
-            # if state is rx, recieve until valid clue recieved or timeout
+            # if state is rx, receive until valid clue received or timeout
             elif self.state == "receiving":
                 if self.ir.ready(4):
                     rxval=self.ir.readbytes()
                     print(f"RX: {rxval}")
                     #todo prepare to rx signature here too and pass on to check_clue
-                    if rxval.find(',') != -1: 
+                    if rxval.count(',') == 2:
                         chksum, self.rxclue, self.rxname = rxval.split(',')
                         print(f"RX: {chksum}, {self.rxclue}, {self.rxname}")
 
