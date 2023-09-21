@@ -30,6 +30,7 @@ class gamedata:
         #print(newclue,alibi)
         if alibi not in self.alibis:
             self.alibis.append(alibi)
+            self.write_alibis()
         else:
             print(f"Alibi {alibi} already known")
 
@@ -45,6 +46,7 @@ class gamedata:
                     cluetype[i][3]=newclue
                     cluetype[i][4]=alibi
                     self.newclue=[i,j]
+                    self.write_clues()
                     return newclue
         return False
 
@@ -110,7 +112,10 @@ class gamedata:
         #should be called every time we add a clue?
         try:
             fhandle = open(self.gamefile, 'w')
-            fhandle.write("\n".join(collection))
+            for cluetype in [self.threats,self.attacks,self.victims]:
+                for clue in cluetype:
+                    fhandle.write(",".join(clue))
+                    fhandle.write("\n")
             fhandle.close()
         except OSError:
             print("Error writing clues file:", self.gamefile)
@@ -131,7 +136,7 @@ class gamedata:
     def write_alibis(self):
         try:
             fhandle = open("data/alibis.txt", 'w')
-            fhandle.write("\n".join(alibis))
+            fhandle.write("\n".join(self.alibis))
             fhandle.close()
         except OSError:
             print("Error writing ailbis file")
