@@ -44,27 +44,40 @@ dpad=FiveWayPad()
 class ledcontrol:
     pixel_pin = board.NEOPIXEL
     num_pixels = 10
+    colors = [color.RED,color.ORANGE,color.YELLOW,color.GREEN,color.BLUE,color.PURPLE,color.WHITE]
+    color_name = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple", "White"]
+    color = colors[0]
     pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.3)
     ledpatterns=[]
     currentpattern=0
 
     def __init__(self):
-        self.ledpatterns.append(Solid(self.pixels,color.BLACK))
-        self.ledpatterns.append(RainbowComet(self.pixels,0.1,ring=True))
-        self.ledpatterns.append(Rainbow(self.pixels,0.1))
-        for c in [color.RED,color.ORANGE,color.YELLOW,color.GREEN,color.BLUE,color.PURPLE,color.WHITE]:
-            self.ledpatterns.append(Comet(self.pixels,0.1,c,tail_length=5,ring=True))
-            self.ledpatterns.append(Solid(self.pixels,c))
-            self.ledpatterns.append(Pulse(self.pixels,0.03,c))
+        self.initcolors()
+
+    def initcolors(self):
+        self.ledpatterns = [
+            Solid(self.pixels,color.BLACK),
+            RainbowComet(self.pixels,0.1,ring=True),
+            Rainbow(self.pixels,0.1),
+            Comet(self.pixels,0.05,self.color,tail_length=3,ring=True),
+            Solid(self.pixels,self.color),
+            Pulse(self.pixels,0.03,self.color),
+            Sparkle(self.pixels,0.1,self.color,3)
+        ]
 
     def nextpattern(self):
         self.currentpattern=(self.currentpattern+1)%len(self.ledpatterns)
-        return self.ledpatterns[self.currentpattern].__qualname__
+        return self.ledpatterns[self.currentpattern].__qualname__[0:10]
+
+    def nextcolor(self):
+        self.color=self.colors[(self.colors.index(self.color) + 1) % len(self.colors)]
+        self.initcolors()
+        return self.color_name[self.colors.index(self.color)]
 
     def animate(self):
         self.ledpatterns[self.currentpattern].animate()
 
-        
+
 leds=ledcontrol()
 
 game=gamedata(0)

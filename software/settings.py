@@ -8,7 +8,7 @@ WHITE=0xFFFFFF
 
 
 class settings:
-    settings=["LED Color","Clear Name","Clear Clues","Clear Contacts","LEDs Off","Advance Game"]
+    settings=["LED Style","LED Color","Clear Name","Clear Clues","Clear Contacts","LEDs Off","Advance Game"]
 
     def __init__(self, group, dpad, game, leds):
         self.group=group
@@ -52,8 +52,11 @@ class settings:
             if self.details.hidden==True:
                 if self.x==0:
                     #advance to next led mode
-                    self.settings[self.x]="LEDs: "+ self.leds.nextpattern()
+                    self.settings[self.x]="Style: "+ self.leds.nextpattern()
                 elif self.x==1:
+                    #advance to next led color
+                    self.settings[self.x]="Color: "+ self.leds.nextcolor()
+                elif self.x==2:
                     #change name by setting to "" and forcing power cycle
                     self.det.text="Wipe your name?\n'<' cancel\n'>' wipe"
                     self.details.hidden=False
@@ -66,7 +69,7 @@ class settings:
                             self.det.text="Name Wiped!\n Power cycle\n to continue"
                             while True:
                                 pass
-                elif self.x==2:
+                elif self.x==3:
                     #clear clues
                     self.det.text="Wipe ALL clues?\n'<' cancel\n'>' wipe"
                     self.details.hidden=False
@@ -77,7 +80,7 @@ class settings:
                         if self.dpad.r.fell:
                             self.game.wipe_clues()
                             self.det.text="Clues Wiped!\n'<' to return"
-                elif self.x==3:
+                elif self.x==4:
                     #clear contacts
                     self.det.text="Wipe all Alibis?\n'<' cancel\n'>' wipe"
                     self.details.hidden=False
@@ -88,10 +91,10 @@ class settings:
                         if self.dpad.r.fell:
                             self.game.wipe_alibis()
                             self.det.text="Alibis Wiped!\n'<' to return"
-                if self.x==4:
+                if self.x==5:
                     #leds off
                     self.leds.currentpattern=0
-                if self.x==5:
+                if self.x==6:
                     #advance game
                     self.game.gamenum=(self.game.gamenum+1)%8
                     self.game.gamefile="data/game"+str(self.game.gamenum)+".csv"
