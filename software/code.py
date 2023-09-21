@@ -22,7 +22,6 @@ from adafruit_led_animation.animation.chase import Chase
 from adafruit_led_animation.animation.comet import Comet
 from adafruit_led_animation.animation.pulse import Pulse
 from adafruit_led_animation.animation.rainbow import Rainbow
-from adafruit_led_animation.animation.sparkle import Sparkle
 from adafruit_led_animation.animation.rainbowchase import RainbowChase
 from adafruit_led_animation.animation.rainbowcomet import RainbowComet
 import adafruit_led_animation.color as color
@@ -47,6 +46,7 @@ class ledcontrol:
     colors = [color.RED,color.ORANGE,color.YELLOW,color.GREEN,color.BLUE,color.PURPLE,color.WHITE]
     color_name = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple", "White"]
     color = colors[0]
+    brightnesslevels = [0.03, 0.3, 0.5]
     pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.3)
     ledpatterns=[]
     currentpattern=0
@@ -59,11 +59,17 @@ class ledcontrol:
             Solid(self.pixels,color.BLACK),
             RainbowComet(self.pixels,0.1,ring=True),
             Rainbow(self.pixels,0.1),
-            Comet(self.pixels,0.05,self.color,tail_length=3,ring=True),
+            Chase(self.pixels,0.1,self.color),
+            Comet(self.pixels,0.1,self.color,tail_length=4,ring=True),
             Solid(self.pixels,self.color),
             Pulse(self.pixels,0.03,self.color),
-            Sparkle(self.pixels,0.1,self.color,3)
         ]
+
+    def nextbrightness(self):
+        self.pixels.brightness=self.brightnesslevels[(self.brightnesslevels.index(self.pixels.brightness) + 1) % len(self.brightnesslevels)]
+        bright = int(self.pixels.brightness*100)
+        if (bright % 10) == 9: bright+=1
+        return str(bright)+"%"
 
     def nextpattern(self):
         self.currentpattern=(self.currentpattern+1)%len(self.ledpatterns)
