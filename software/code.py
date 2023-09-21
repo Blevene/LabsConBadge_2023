@@ -67,9 +67,8 @@ class ledcontrol:
         
 leds=ledcontrol()
 
-game=gamedata(0)
-#musttodo advance game numbers
 homepage=home(display.homegroup,dpad)
+game=gamedata(0)
 cluespage=clues(display.cluesgroup,dpad,game)
 settingspage=settings(display.settingsgroup,dpad,game,leds)
 alibispage=alibis(display.alibisgroup,dpad,game)
