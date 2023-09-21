@@ -49,9 +49,15 @@ class trade:
                 cksum = hex(binascii.crc32(bytearray(str(self.game.myclue) + "," + str(self.game.myname) ) ) ) [2:]
                 print(f"TX: {cksum}, {self.game.myclue} , {self.game.myname}")
                 self.ir.writebytes(bytearray(cksum + "," + str(self.game.myclue) + "," + str(self.game.myname)))
-                self.state="receiving"
-                self.timeout=ticks_ms()+5000
                 self.ir.uart.reset_input_buffer()
+                self.state="receiving"
+
+                self.ir.disablePHY()
+                self.state="success"
+                print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
+                self.details.text="transmission done"
+
+                self.timeout=ticks_ms()+30000
 
             # if state is rx, recieve until valid clue recieved or timeout
             elif self.state == "receiving":
