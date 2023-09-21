@@ -49,6 +49,8 @@ class clues:
         for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
             count=0
             last=None
+            for i in range(13):
+                self.clue_grid[i,j]=0
             for i in range(self.game.cluecounts[j]):
                 if cluetype[i][4] != "":
                     self.clue_grid[i,j]=j*2+1
@@ -117,7 +119,7 @@ class clues:
         else: clue=self.game.victims[self.x]
         #print(clue)
         if clue[3]=="!":
-            self.detaillabel.text="Attribution Time!\nIt was\n"+clue[1]
+            self.detaillabel.text="Attribution!\nIt was\n"+clue[1]
         elif clue[4]=="":
             self.detaillabel.text="Could've been\n"+clue[1]
         elif clue[4]==self.game.myname:
