@@ -98,7 +98,7 @@ class trade:
                 self.state="success"
                 print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
                 self.details.text="< "+self.rxname+" \nsaid it wasn't\n >"+self.rxclue
-                
+
             # process keypresses
             self.dpad.update()
             # if down is pressed, return to where we came from
@@ -112,5 +112,5 @@ class trade:
                 self.group.hidden=True
                 return retval
             # if u is pressed, restart the trade process
-            if self.dpad.u.fell: 
+            if self.dpad.u.fell:
                 self.state="transmitting"

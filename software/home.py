@@ -12,12 +12,12 @@ class home:
     #todo: sponsor images
 
     strings=[
-            "< - > change view\n^ - v to trade\nPress for more",
+            "< - > change view\n^ trade | v sleep\nPress for more",
             "Thank you sponsors:\n   LutaSecurity, \n     Stairwell\n",
             "Thank you sponsors:\n Binarly, Aesir,\nGreyNoise, Canary\n",
             "Thank you sponsors:\nThe Vertex Project,\n  Vector 35\n",
             "Thank you sponsors:\n  Cisco Talos,\n   BugCrowd\n",
-            "Thank you sponsors:\n  The Alperovitch\n    Institute\n",    
+            "Thank you sponsors:\n  The Alperovitch\n    Institute\n",
             "Thank you sponsors:\nHiddenLayer, Nuand,\n Framework\n",
             ]
 
@@ -37,7 +37,7 @@ class home:
         except OSError as e:
             print(e)
             name=""
-        
+
         if name=="":
             self.showandwait("        The\n    Attribution\n       Game!      v")
             self.showandwait("Meet people & trade\n clues to attribute \n the attack       v")
@@ -70,7 +70,7 @@ class home:
             #print(self.dpad.r.fell)
             #print(self.dpad.l.fell)
 
-            if self.dpad.u.fell: 
+            if self.dpad.u.fell:
                 cindex=(cindex-1)%len(crange)
                 playername[nindex] = crange[cindex]
                 self.contents.text=mystring.format("".join(playername))
@@ -79,7 +79,7 @@ class home:
                 playername[nindex] = crange[cindex]
                 self.contents.text=mystring.format("".join(playername))
             elif self.dpad.l.fell:
-                if nindex >= 0: 
+                if nindex >= 0:
                     nindex -= 1
                 else:
                     nindex = 0
@@ -88,7 +88,7 @@ class home:
                     nindex = 0
                 else:
                     nindex += 1
-            elif self.dpad.x.fell: 
+            elif self.dpad.x.fell:
                 print("Saving name")
                 try:
                     with open("data/myname.txt",'w') as file:
@@ -101,19 +101,19 @@ class home:
         self.contents.hidden=False
         #todo: make display auto-advance
         #todo: don't sleep till done?
-        if self.dpad.u.fell: 
+        if self.dpad.u.fell:
             self.contents.hidden=True
             return "trade"
-        if self.dpad.d.fell: 
+        if self.dpad.d.fell:
             self.contents.hidden=True
             return "sleep"
-        if self.dpad.l.fell: 
+        if self.dpad.l.fell:
             self.contents.hidden=True
             return "alibis"
-        if self.dpad.r.fell: 
+        if self.dpad.r.fell:
             self.contents.hidden=True
             return "clues"
-        if self.dpad.x.fell: 
+        if self.dpad.x.fell:
             self.currentstring=(self.currentstring+1)%(len(self.strings))
             print(self.strings[self.currentstring])
             self.contents.text=self.strings[self.currentstring]

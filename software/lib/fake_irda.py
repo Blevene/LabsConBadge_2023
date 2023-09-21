@@ -46,7 +46,7 @@ class FakeIRDA:
         for i in byteswrite:
             self.writebyte(i)
 
-    # set shutdown pin to 0 to wake up phy 
+    # set shutdown pin to 0 to wake up phy
     def enablePHY(self):
         self.shutdown.value=0
 

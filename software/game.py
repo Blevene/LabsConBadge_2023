@@ -32,9 +32,9 @@ class gamedata:
             self.alibis.append(alibi)
         else:
             print(f"Alibi {alibi} already known")
-            
+
 #        for clue in (self.threats+self.attacks+self.victims):
-#            if clue[1] == newclue: 
+#            if clue[1] == newclue:
 #                clue[3] = newclue
 #                clue[4] = alibi
 #                self.newclue=newclue
@@ -46,8 +46,8 @@ class gamedata:
                     cluetype[i][4]=alibi
                     self.newclue=[i,j]
                     return newclue
-        return False 
-    
+        return False
+
     def is_solved(self):
         #musttodo solution checking and reporting
         #for t in threats:# for t,a,v
@@ -66,15 +66,14 @@ class gamedata:
             print("Error reading name from data/myname.txt")
             self.myname="unknown"
 
-    def wipe_name(self): 
+    def wipe_name(self):
         self.myname=""
         self.write_name()
 
     def write_name(self):
         try:
-            fhandle = open("data/myname.txt", 'w')
-            fhandle.write(self.myname)
-            fhandle.close()
+            with open("data/myname.txt", 'w') as fhandle:
+                fhandle.write(self.myname)
         except OSError:
             print("Error writing name file")
             return False
@@ -96,7 +95,7 @@ class gamedata:
             self.check_clue(self.myclue,self.myname)
         except OSError:
             print("Error reading from file:", self.gamefile)
-    
+
     def wipe_clues(self):
         for cluetype in [self.threats,self.attacks,self.victims]:
             for clue in cluetype:
