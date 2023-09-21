@@ -1,12 +1,13 @@
 import board
+import busio
 import digitalio
 
 #todo - add error checking
 
 class FakeIRDA:
-    def __init__(self,uart=board.UART(),sd=board.D8):
+    def __init__(self,uart=busio.UART(board.TX, board.RX, baudrate=350000, receiver_buffer_size=64),sd=board.D8):
         self.uart=uart
-        self.uart.baudrate=350000
+        #self.uart.baudrate=350000
         self.shutdown=digitalio.DigitalInOut(sd)
         self.shutdown.switch_to_output()
         self.shutdown.value=1
