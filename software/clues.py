@@ -27,7 +27,7 @@ class clues:
 
         clue_sheet, palette = adafruit_imageload.load("assets/clues.bmp",bitmap=displayio.Bitmap, palette=displayio.Palette)
         self.clue_grid = displayio.TileGrid(clue_sheet, pixel_shader=palette,
-            width=11, height=3,
+            width=13, height=3,
             tile_width=12, tile_height=16)
         self.clue_group=displayio.Group(y=15)
         self.clue_group.append(self.clue_grid)
@@ -47,9 +47,21 @@ class clues:
 
     def setcards(self):
         for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
+            count=0
+            last=None
             for i in range(self.game.cluecounts[j]):
-                self.clue_grid[i,j]=7
-                if cluetype[i][3] != "": self.clue_grid[i,j]=j*2+1
+                if cluetype[i][4] != "":
+                    self.clue_grid[i,j]=j*2+1
+                    print(cluetype[i][4],"has",cluetype[i][1])
+                else:
+                    self.clue_grid[i,j]=7
+                    last=i
+                    count+=1
+                    print("not yet:",cluetype[i][1])
+            if count==1:
+                self.clue_grid[last,j]=9
+                cluetype[last][3]="!"
+                print("solved",cluetype[last][1])
         self.x=0
         self.y=0
 
@@ -61,7 +73,7 @@ class clues:
         self.clue_grid[self.x,self.y]-=1
         #if new clue, go to it
         if self.game.newclue != None:
-            if self.game.newclue == -1:
+            if True or self.game.newclue == -1:
                self.setcards()
                self.game.newclue=None
             else:
@@ -104,7 +116,9 @@ class clues:
         elif self.y==1: clue=self.game.attacks[self.x]
         else: clue=self.game.victims[self.x]
         #print(clue)
-        if clue[3]=="":
+        if clue[3]=="!":
+            self.detaillabel.text="Attribution Time!\nIt was\n"+clue[1]
+        elif clue[4]=="":
             self.detaillabel.text="Could've been\n"+clue[1]
         elif clue[4]==self.game.myname:
             self.detaillabel.text="I know it wasn't\n"+clue[1]
