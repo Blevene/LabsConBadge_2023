@@ -85,8 +85,8 @@ while True:
     #scan inputs
     dpad.update()
     if page!=0: display.show(page)
-    #if dpad.duration() > SLEEPTIMEOUT and page != "trade": 
-    #    page=sleeppage.update()
+    if dpad.duration() > SLEEPTIMEOUT and page != "trade": 
+        page=sleeppage.update()
     #if a button is pressed, handle it
     if not dpad.pressed():
         time.sleep(0.001)

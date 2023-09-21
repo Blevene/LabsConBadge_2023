@@ -48,7 +48,7 @@ class home:
             self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
             self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
             self.showandwait("\n     Have fun!\n                  v")
-            self.contents.text=strings[0]
+            self.contents.text=self.strings[0]
 
     def showandwait(self,mystring):
         self.contents.text=mystring

@@ -12,6 +12,6 @@ class sleep:
             return 0 # will return to last normal page
         elif self.dpad.u.fell:
             self.display.maingroup.hidden=False
-            return "trade"
+            return 0 # will return to last normal page
         self.display.maingroup.hidden=True
         return "sleep"
