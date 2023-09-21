@@ -46,7 +46,7 @@ class ledcontrol:
     colors = [color.RED,color.ORANGE,color.YELLOW,color.GREEN,color.BLUE,color.PURPLE,color.WHITE]
     color_name = ["Red", "Orange", "Yellow", "Green", "Blue", "Purple", "White"]
     color = colors[0]
-    brightnesslevels = [0.03, 0.3, 0.5]
+    brightnesslevels = [0.02, 0.15, 0.3, 0.5]
     pixels = neopixel.NeoPixel(pixel_pin, num_pixels, brightness=0.3)
     ledpatterns=[]
     currentpattern=0
@@ -68,7 +68,6 @@ class ledcontrol:
     def nextbrightness(self):
         self.pixels.brightness=self.brightnesslevels[(self.brightnesslevels.index(self.pixels.brightness) + 1) % len(self.brightnesslevels)]
         bright = int(self.pixels.brightness*100)
-        if (bright % 10) == 9: bright+=1
         return str(bright)+"%"
 
     def nextpattern(self):
