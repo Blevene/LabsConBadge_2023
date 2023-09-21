@@ -80,12 +80,13 @@ page="home"
 lastpage="home"
 SLEEPTIMEOUT=90
 while True:
-    leds.animate()
+    # GC before animation smooths out animations
     gc.collect()
+    leds.animate()
     #scan inputs
     dpad.update()
     if page!=0: display.show(page)
-    if dpad.duration() > SLEEPTIMEOUT and page != "trade": 
+    if dpad.duration() > SLEEPTIMEOUT and page != "trade":
         page=sleeppage.update()
     #if a button is pressed, handle it
     if not dpad.pressed():
