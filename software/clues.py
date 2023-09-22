@@ -22,7 +22,7 @@ class clues:
         self.dpad=dpad
         self.game=game
 
-        self.header=label.Label(terminalio.FONT,text="clues", color=BLACK, x=8, y=8)
+        self.header=label.Label(terminalio.FONT,text="Clues, Game 0", color=BLACK, x=8, y=8)
         self.group.append(self.header)
 
         clue_sheet, palette = adafruit_imageload.load("assets/clues.bmp",bitmap=displayio.Bitmap, palette=displayio.Palette)
@@ -46,6 +46,7 @@ class clues:
 
 
     def setcards(self):
+        self.header.text="Clues, game # " + str(self.game.gamenum)
         for j, cluetype in enumerate([self.game.threats,self.game.attacks,self.game.victims]):
             count=0
             last=None
@@ -84,8 +85,8 @@ class clues:
                 self.game.newclue=None
         if self.dpad.u.fell:
             if self.y==0:
-                self.clue_group.hidden=True
-                self.details.hidden=True
+                #self.clue_group.hidden=True
+                #self.details.hidden=True
                 self.clue_grid[self.x,self.y]+=1
                 return "trade"
             self.y -=1

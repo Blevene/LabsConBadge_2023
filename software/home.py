@@ -19,6 +19,7 @@ class home:
             "Thank you sponsors:\n  Cisco Talos,\n   BugCrowd\n",
             "Thank you sponsors:\n  The Alperovitch\n    Institute\n",
             "Thank you sponsors:\nHiddenLayer, Nuand,\n Framework\n",
+            " Thank you coders:\n   @silascutler\n    @psifertex\n"
             ]
 
     def __init__(self, group, dpad):
@@ -46,7 +47,9 @@ class home:
             name=self.showandprompty(" ^v to choose chars\n Press to save\n{}")
             self.showandwait("welcome\n to the game   v\n"+name+"!")
             self.showandwait("press '^' & point @\n another to trade \n contact & clues! v")
-            self.showandwait("The combo w/o alibi\n is the solution!\n                  v")
+            self.showandwait("press '<' to get to\n settings and a list\n of alibis        v")
+            self.showandwait("press '>' to get to\n your clue collection\n                  v")
+            self.showandwait("Collect enough clues\n to figure out\n what happend     v")
             self.showandwait("\n     Have fun!\n                  v")
             self.contents.text=self.strings[0]
 
