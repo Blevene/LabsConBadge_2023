@@ -6,6 +6,8 @@ from sh1106_ui import box
 import terminalio
 import displayio
 import binascii
+import board
+import busio
 
 BLACK=0x000000
 WHITE=0xFFFFFF
@@ -46,17 +48,9 @@ class trade:
             if self.state == "transmitting":
                 print("transmitting")
                 self.details.text="transmitting..."
-                cksum = hex(binascii.crc32(bytearray(str(self.game.myclue) + "," + str(self.game.myname) ) ) ) [2:]
-                print(f"TX: {cksum}, {self.game.myclue} , {self.game.myname}")
-                self.ir.writebytes(bytearray(cksum + "," + str(self.game.myclue) + "," + str(self.game.myname)))
+                self.ir.writebytes(self.game.mytxval)
                 self.ir.uart.reset_input_buffer()
                 self.state="receiving"
-
-                self.ir.disablePHY()
-                self.state="success"
-                print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
-                self.details.text="transmission done"
-
                 self.timeout=ticks_ms()+30000
 
             # if state is rx, receive until valid clue received or timeout
@@ -69,12 +63,13 @@ class trade:
                         chksum, self.rxclue, self.rxname = rxval.split(',')
                         print(f"RX: {chksum}, {self.rxclue}, {self.rxname}")
 
-                        if binascii.crc32(bytearray(str(self.rxclue) + "," + str(self.rxname))) != int(chksum, 16):
-                            print("[!] Invalid Checksum")
-                            self.state="error"
-                            self.details.text="receive error :(\n^ try again\nv cancel"
+#                        if False or binascii.crc32(bytearray(str(self.rxclue) + "," + str(self.rxname))) != int(chksum, 16):
+#                            print("[!] Invalid Checksum")
+#                            self.state="error"
+#                            self.details.text="receive error :(\n^ try again\nv cancel"
 
-                        elif self.rxclue is not None and self.rxname is not None and self.game.check_clue(self.rxclue, self.rxname):
+#                        elif self.rxclue is not None and self.rxname is not None and self.game.check_clue(self.rxclue, self.rxname):
+                        if self.rxclue is not None and self.rxname is not None and self.game.check_clue(self.rxclue, self.rxname):
                             print("recieved")
                             self.state="responding"
                         else:
@@ -92,9 +87,7 @@ class trade:
             elif self.state == "responding":
                 print("responding")
                 self.details.text="responding"
-                cksum = hex(binascii.crc32(bytearray(str(self.game.myclue) + "," + str(self.game.myname))))[2:]
-                self.ir.writebytes(bytearray(cksum + "," + str(self.game.myclue) + "," + str(self.game.myname)))
-
+                self.ir.writebytes(self.game.mytxval)
                 self.state="success"
                 print(self.rxname,"\nsaid it wasn't\n",self.rxclue)
                 self.details.text="< "+self.rxname+" \nsaid it wasn't\n >"+self.rxclue
