@@ -1,20 +1,18 @@
 #!/bin/bash
 
-for INDEX in $(seq 1 50);
-do
-	echo "Plug in"
-	read
-	cp -r software/* /media/silas/CIRCUITPY/
-
-
-	cp configs/g0/$INDEX_game0.csv /media/silas/CIRCUITPY/data/game0.csv
-	cp configs/g1/$INDEX_game1.csv /media/silas/CIRCUITPY/data/game1.csv
-	cp configs/g2/$INDEX_game2.csv /media/silas/CIRCUITPY/data/game2.csv
-	cp configs/g3/$INDEX_game3.csv /media/silas/CIRCUITPY/data/game3.csv
-	cp configs/g4/$INDEX_game4.csv /media/silas/CIRCUITPY/data/game4.csv
-	
-	umount /media/silas/CIRCUITPY/
-	
-	echo "DONE $INDEX"
+for I in {0..1024}; do
+	echo "#$I: waiting for /dev/$1. Plug in!"
+	while [ ! -b /dev/$1 ]; do sleep .1; done
+	echo "$1 attached. mounting.. "
+	pmount /dev/$1
+	echo "$1 wiping.. "
+	rm /media/$1/*
+	echo "$1 copying code.. "
+	cp -r software/* /media/$1/ 
+	echo "$1 copying dataset.. "
+	cp configs/$I/* /media/$1/data/
+	echo "$1 unmounting.. "
+	pumount /media/$1
+	echo "$1 Done - Unplug!"
+	while [ -b /dev/$1 ]; do sleep .1; done
 done
-	
