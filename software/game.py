@@ -1,9 +1,11 @@
 import circuitpython_csv
+import binascii
 
 class gamedata:
     gamenum=0
     myclue=None
     myname=None
+    mytxval=None
     newclue=None
     namefile="data/myname.txt"
     gamefile="data/game1.csv"
@@ -82,6 +84,11 @@ class gamedata:
                     elif row[0] == "*":self.myclue=row[1]
             self.cluecounts=[len(self.threats),len(self.attacks),len(self.victims)]
             self.check_clue(self.myclue,self.myname)
+            crc = hex(binascii.crc32(bytearray(str(self.myclue)+","+str(self.myname))))[2:]
+            crs = bytearray([13,13,13,13,13,13,13,13])
+            print(crc,self.myclue,self.myname)
+            self.mytxval=crs+bytearray(",".join([crc,self.myclue,self.myname]))
+            print(f"{self.mytxval}")
         except OSError:
             print("Error reading from file:", self.gamefile)
 
@@ -103,6 +110,7 @@ class gamedata:
                 for clue in cluetype:
                     fhandle.write(",".join(clue))
                     fhandle.write("\n")
+            fhandle.write("*,"+str(self.myclue))
             fhandle.close()
         except OSError:
             print("Error writing clues file:", self.gamefile)
