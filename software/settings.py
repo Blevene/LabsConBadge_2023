@@ -39,7 +39,6 @@ class settings:
         self.contents.text=newtext
         self.contents.hidden=False
         self.det.text=self.settings[self.x]
-        #musttodo: attach to functions
         if self.dpad.u.fell:
             self.x =(self.x-1)%len(self.settings)
         if self.dpad.d.fell:

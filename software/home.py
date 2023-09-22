@@ -99,10 +99,7 @@ class home:
 
     def update(self):
         self.contents.hidden=False
-        #todo: make display auto-advance
-        #todo: don't sleep till done?
         if self.dpad.u.fell:
-            self.contents.hidden=True
             return "trade"
         if self.dpad.d.fell:
             self.contents.hidden=True

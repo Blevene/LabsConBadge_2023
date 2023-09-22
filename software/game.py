@@ -1,8 +1,5 @@
 import circuitpython_csv
 
-#musttodo test file write
-#todo make alibis a csv of contact,[clues,...]
-
 class gamedata:
     gamenum=0
     myclue=None
@@ -25,8 +22,6 @@ class gamedata:
         self.read_clues()
 
     def check_clue(self,newclue,alibi):
-        # todo: check signature
-        # todo: remove duplicates in alibis
         #print(newclue,alibi)
         if alibi not in self.alibis:
             self.alibis.append(alibi)
@@ -49,14 +44,6 @@ class gamedata:
                     self.write_clues()
                     return newclue
         return False
-
-    def is_solved(self):
-        #musttodo solution checking and reporting
-        #for t in threats:# for t,a,v
-            # for each clue
-                # if clue is null append to suspects
-            # if >1 suspect return false
-        return True
 
     def read_name(self):
         #getname, if not, do oob?
