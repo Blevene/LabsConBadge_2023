@@ -11,6 +11,7 @@ class FakeIRDA:
         self.shutdown=digitalio.DigitalInOut(sd)
         self.shutdown.switch_to_output()
         self.shutdown.value=1
+        self.possiblymisaligned=False
 
     # reads two bytes from uart and repacks it into one byte of data and returns it
     def readbyte(self):
@@ -18,6 +19,19 @@ class FakeIRDA:
         rxval=self.uart.read(2)
         if (rxval is not None) and (len(rxval)==2):
             #print(rxval,rxval[0] & (rxval[1]>>1|128))
+            #test for misaligned lead-in of CRs by decoding with [1] and [0] swapped
+            if (rxval[1] & (rxval[0]>>1|128))==13:
+                if self.possiblymisaligned==False:
+                    #if this is the first time, keep track
+                    self.possiblymisaligned=True
+                    print("possiblymisaligned")
+                else:
+                    #if this is the second time - shift by one byte
+                    rxval=self.uart.read(1)
+                    rxval=self.uart.read(2)
+            else:
+                #otherwise, we're probably fine
+                self.possiblymisaligned=False
             return chr(rxval[0] & (rxval[1]>>1|128))
 
     # calls readbyte N times, reading 2*N bytes
