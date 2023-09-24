@@ -1,4 +1,5 @@
 import circuitpython_csv
+import gc
 import binascii
 
 class gamedata:
@@ -25,6 +26,7 @@ class gamedata:
 
     def check_clue(self,newclue,alibi):
         #print(newclue,alibi)
+        gc.collect()
         if alibi not in self.alibis:
             self.alibis.append(alibi)
             self.write_alibis()

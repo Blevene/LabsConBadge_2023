@@ -1,5 +1,4 @@
 import time
-import gc
 import board
 import busio
 import pulseio
@@ -44,7 +43,6 @@ lastpage="home"
 SLEEPTIMEOUT=90
 while True:
     # GC before animation smooths out animations
-    gc.collect()
     leds.animate()
     #scan inputs
     dpad.update()
