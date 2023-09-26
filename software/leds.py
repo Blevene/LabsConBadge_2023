@@ -27,6 +27,7 @@ class ledcontrol:
     def __init__(self):
         self.initcolors()
 
+    #creates all the animations
     def initcolors(self):
         self.ledpatterns = [
             Solid(self.pixels,color.BLACK),
@@ -38,19 +39,23 @@ class ledcontrol:
             Pulse(self.pixels,0.03,self.color),
         ]
 
+    #steps through brightness levels and applies
     def nextbrightness(self):
         self.pixels.brightness=self.brightnesslevels[(self.brightnesslevels.index(self.pixels.brightness) + 1) % len(self.brightnesslevels)]
         bright = int(self.pixels.brightness*100)
         return str(bright)+"%"
 
+    #sets the current pattern to be displayed
     def nextpattern(self):
         self.currentpattern=(self.currentpattern+1)%len(self.ledpatterns)
         return self.ledpatterns[self.currentpattern].__qualname__[0:10]
 
+    #chooses the next color, and then recreates all the animations with that color
     def nextcolor(self):
         self.color=self.colors[(self.colors.index(self.color) + 1) % len(self.colors)]
         self.initcolors()
         return self.color_name[self.colors.index(self.color)]
 
+    #displays the currently selected animation
     def animate(self):
         self.ledpatterns[self.currentpattern].animate()
